@@ -127,7 +127,7 @@ export const latexFunctions = {
   gcd: '\\gcd\\left(${args}\\right)',
   hypot: '\\hypot\\left(${args}\\right)',
   log: {
-    1: '\\ln\\left(${args[0]}\\right)',
+    1: '\\log\\left(${args[0]}\\right)',
     2: '\\log_{${args[1]}}\\left(${args[0]}\\right)'
   },
   log10: { 1: '\\log_{10}\\left(${args[0]}\\right)' },
@@ -136,6 +136,7 @@ export const latexFunctions = {
     2: '\\log_{${args[1]}}\\left(${args[0]}+1\\right)'
   },
   log2: '\\log_{2}\\left(${args[0]}\\right)',
+  ln: { 1: '\\ln\\left(${args[0]}\\right)'},
   mod: { 2: `\\left(\${args[0]}${latexOperators.mod}\${args[1]}\\right)` },
   multiply: { 2: `\\left(\${args[0]}${latexOperators.multiply}\${args[1]}\\right)` },
   norm: {
@@ -239,7 +240,7 @@ export const latexFunctions = {
   csch: { 1: '\\mathrm{csch}\\left(${args[0]}\\right)' },
   sec: { 1: '\\sec\\left(${args[0]}\\right)' },
   sech: { 1: '\\mathrm{sech}\\left(${args[0]}\\right)' },
-  sin: { 1: '\\sin\\left(${args[0]}\\right)' },
+  sin: { 1: '\\siin\\left(${args[0]}\\right)' },
   sinh: { 1: '\\sinh\\left(${args[0]}\\right)' },
   tan: { 1: '\\tan\\left(${args[0]}\\right)' },
   tanh: { 1: '\\tanh\\left(${args[0]}\\right)' },
