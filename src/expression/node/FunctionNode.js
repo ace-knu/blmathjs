@@ -39,12 +39,14 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
       latex += template.substring(inputPos, match.index)
       inputPos = match.index
 
+      console.log("match[0]", match[0], match[1], match[2])
       if (match[0] === '$$') { // escaped dollar sign
         latex += '$'
         inputPos++
       } else { // template parameter
         inputPos += match[0].length
         const property = node[match[1]]
+
         if (!property) {
           throw new ReferenceError('Template: Property ' + match[1] + ' does not exist.')
         }
@@ -71,9 +73,17 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             default:
               throw new TypeError('Template: ' + match[1] + ' has to be a Node, String or array of Nodes')
           }
-        } else { // with square brackets
+        } else { // with square brackets  - 템플릿 내 args[1]이 있는 경우에 해당함
           if (isNode(property[match[2]] && property[match[2]])) {
-            latex += property[match[2]].toTex(options)
+            //console.log("property[match[2]] :", property[match[2]])
+            //console.log("current latex", latex)
+            if (property[match[2]].isSymbolNode) {      // added by jcho
+              latex += property[match[2]].toTex(options)
+            } else {      // 단순 심볼이 아닌 경우 괄호 추가
+              latex += '\\left('
+              latex += property[match[2]].toTex(options)
+              latex += '\\right)'
+            }
           } else {
             throw new TypeError('Template: ' + match[1] + '[' + match[2] + '] is not a Node.')
           }
@@ -463,6 +473,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
         latexConverter = math[this.name].toTex
       }
 
+      console.log("latexConverter", latexConverter)   // Test (jcho)
       let customToTex
       switch (typeof latexConverter) {
         case 'function': // a callback function
