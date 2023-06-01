@@ -39,7 +39,6 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
       latex += template.substring(inputPos, match.index)
       inputPos = match.index
 
-      console.log("match[0]", match[0], match[1], match[2])
       if (match[0] === '$$') { // escaped dollar sign
         latex += '$'
         inputPos++
@@ -473,7 +472,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
         latexConverter = math[this.name].toTex
       }
 
-      console.log("latexConverter", latexConverter)   // Test (jcho)
+      //console.log("latexConverter", latexConverter)   // Test (jcho)
       let customToTex
       switch (typeof latexConverter) {
         case 'function': // a callback function
