@@ -66,6 +66,6 @@ describe('square', function () {
 
   it('should LaTeX square', function () {
     const expression = math.parse('square(4)')
-    assert.strictEqual(expression.toTex(), '\\left(4\\right)^2')
+    assert.strictEqual(expression.toTex(), '4^2')
   })
 })

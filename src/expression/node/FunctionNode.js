@@ -78,6 +78,8 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             //console.log("current latex", latex)
             if (property[match[2]].isSymbolNode) {      // added by jcho
               latex += property[match[2]].toTex(options)
+            } else if (property[match[2]].isConstantNode) {
+              latex += property[match[2]].toTex(options)
             } else {      // 단순 심볼이 아닌 경우 괄호 추가
               latex += '\\left('
               latex += property[match[2]].toTex(options)

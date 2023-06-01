@@ -107,6 +107,6 @@ describe('log10', function () {
 
   it('should LaTeX log10', function () {
     const expression = math.parse('log10(10)')
-    assert.strictEqual(expression.toTex(), '\\log_{10}\\left(10\\right)')
+    assert.strictEqual(expression.toTex(), '\\log_{10}10')
   })
 })
