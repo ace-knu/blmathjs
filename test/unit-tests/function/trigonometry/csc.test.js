@@ -90,6 +90,6 @@ describe('csc', function () {
 
   it('should LaTeX csc', function () {
     const expression = math.parse('csc(1)')
-    assert.strictEqual(expression.toTex(), '\\csc\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\csc1')
   })
 })

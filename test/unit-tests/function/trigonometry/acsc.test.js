@@ -137,6 +137,6 @@ describe('acsc', function () {
 
   it('should LaTex acsc', function () {
     const expression = math.parse('acsc(2)')
-    assert.strictEqual(expression.toTex(), '\\csc^{-1}\\left(2\\right)')
+    assert.strictEqual(expression.toTex(), '\\csc^{-1}2')
   })
 })

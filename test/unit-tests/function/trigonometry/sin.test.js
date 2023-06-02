@@ -121,6 +121,6 @@ describe('sin', function () {
 
   it('should LaTeX sin', function () {
     const expression = math.parse('sin(0.5)')
-    assert.strictEqual(expression.toTex(), '\\sin\\left(0.5\\right)')
+    assert.strictEqual(expression.toTex(), '\\sin0.5')
   })
 })

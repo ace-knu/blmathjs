@@ -114,6 +114,6 @@ describe('asech', function () {
 
   it('should LaTeX asech', function () {
     const expression = math.parse('asech(1)')
-    assert.strictEqual(expression.toTex(), '\\mathrm{sech}^{-1}\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\mathrm{sech}^{-1}1')
   })
 })

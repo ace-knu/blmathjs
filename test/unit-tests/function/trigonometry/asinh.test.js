@@ -95,6 +95,6 @@ describe('asinh', function () {
 
   it('should LaTeX asinh', function () {
     const expression = math.parse('asinh(2)')
-    assert.strictEqual(expression.toTex(), '\\sinh^{-1}\\left(2\\right)')
+    assert.strictEqual(expression.toTex(), '\\sinh^{-1}2')
   })
 })

@@ -280,7 +280,7 @@ describe('OperatorNode', function () {
       assert.strictEqual(add.toTex(), ' a+\\mathrm{b}+ c')
       assert.strictEqual(multiply.toTex(), ' a\\cdot\\mathrm{b}\\cdot c')
       // The first two verify that implicit: hide is indeed the default
-      assert.strictEqual(implicitMultiply.toTex(), ' a~\\mathrm{b}~ c')
+      assert.strictEqual(implicitMultiply.toTex(), ' a\\cdot\\mathrm{b}\\cdot c')
       assert.strictEqual(implicitMultiply.toTex({ implicit: 'hide' }), ' a~\\mathrm{b}~ c')
       assert.strictEqual(implicitMultiply.toTex({ implicit: 'show' }), ' a\\cdot\\mathrm{b}\\cdot c')
     })

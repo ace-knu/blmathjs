@@ -113,6 +113,6 @@ describe('acot', function () {
 
   it('should LaTeX acot', function () {
     const expression = math.parse('acot(2)')
-    assert.strictEqual(expression.toTex(), '\\cot^{-1}\\left(2\\right)')
+    assert.strictEqual(expression.toTex(), '\\cot^{-1}2')
   })
 })

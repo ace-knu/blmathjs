@@ -118,6 +118,6 @@ describe('asec', function () {
 
   it('should LaTeX asec', function () {
     const expression = math.parse('asec(2)')
-    assert.strictEqual(expression.toTex(), '\\sec^{-1}\\left(2\\right)')
+    assert.strictEqual(expression.toTex(), '\\sec^{-1}2')
   })
 })

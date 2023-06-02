@@ -133,7 +133,7 @@ export const latexFunctions = {
   log10: { 1: '\\log_{10}${args[0]}' },
   log1p: {
     1: '\\ln${args[0]}+1',
-    2: '\\log_{${args[1]}}${args[0]}+1'
+    2: '\\log_{${args[1]}}\\left(${args[0]}+1\\right)'
   },
   log2: '\\log_{2}${args[0]}',
   ln: { 1: '\\ln${args[0]}'},
@@ -150,7 +150,7 @@ export const latexFunctions = {
     1: '\\left\\lfloor${args[0]}\\right\\rceil',
     2: undefined // use default template
   },
-  sign: { 1: '\\mathrm{${name}}\\left(${args[0]}\\right)' },
+  sign: { 1: '\\mathrm{${name}}${args[0]}' },
   sqrt: { 1: '\\sqrt{${args[0]}}' },
   square: { 1: '${args[0]}^2' },
   subtract: { 2: `\\left(\${args[0]}${latexOperators.subtract}\${args[1]}\\right)` },
@@ -172,8 +172,8 @@ export const latexFunctions = {
   stirlingS2: { 2: '\\mathrm{S}\\left(${args}\\right)' },
 
   // complex
-  arg: { 1: '\\arg\\left(${args[0]}\\right)' },
-  conj: { 1: '\\left(${args[0]}\\right)^*' },
+  arg: { 1: '\\arg${args[0]}' },
+  conj: { 1: '${args[0]}^*' },
   im: { 1: '\\Im\\left\\lbrace${args[0]}\\right\\rbrace' },
   re: { 1: '\\Re\\left\\lbrace${args[0]}\\right\\rbrace' },
 
@@ -184,15 +184,15 @@ export const latexFunctions = {
   xor: { 2: `\\left(\${args[0]}${latexOperators.xor}\${args[1]}\\right)` },
 
   // matrix
-  cross: { 2: '\\left(${args[0]}\\right)\\times\\left(${args[1]}\\right)' },
-  ctranspose: { 1: `\\left(\${args[0]}\\right)${latexOperators.ctranspose}` },
-  det: { 1: '\\det ${args[0]}' },
+  cross: { 2: '${args[0]}\\times${args[1]}' },
+  ctranspose: { 1: `\${args[0]}${latexOperators.ctranspose}` },
+  det: { 1: '\\det${args[0]}' },
   dot: { 2: '${args[0]}\\cdot${args[1]}' },
   expm: { 1: '\\exp${args[0]}' },
   inv: { 1: '${args[0]}^{-1}' },
   pinv: { 1: '${args[0]}^{+}' },
   sqrtm: { 1: `{\${args[0]}}${latexOperators.pow}{\\frac{1}{2}}` },
-  trace: { 1: '\\mathrm{tr}\\left(${args[0]}\\right)' },
+  trace: { 1: '\\mathrm{tr}${args[0]}' },
   transpose: { 1: `\${args[0]}${latexOperators.transpose}` },
 
   // probability
@@ -230,7 +230,7 @@ export const latexFunctions = {
   asin: { 1: '\\sin^{-1}${args[0]}' },
   asinh: { 1: '\\sinh^{-1}${args[0]}' },
   atan: { 1: '\\tan^{-1}${args[0]}' },
-  atan2: { 2: '\\mathrm{atan2}${args}' },
+  atan2: { 2: '\\mathrm{atan2}\\left(${args}\\right(' },
   atanh: { 1: '\\tanh^{-1}${args[0]}' },
   cos: { 1: '\\cos${args[0]}' },
   cosh: { 1: '\\cosh${args[0]}' },
@@ -240,8 +240,8 @@ export const latexFunctions = {
   csch: { 1: '\\mathrm{csch}${args[0]}' },
   sec: { 1: '\\sec${args[0]}' },
   sech: { 1: '\\mathrm{sech}${args[0]}' },
-  sin: { 1: '\\sin ${args[0]}' },
-  sinh: { 1: '\\sinh${args[0]})' },
+  sin: { 1: '\\sin${args[0]}' },
+  sinh: { 1: '\\sinh${args[0]}' },
   tan: { 1: '\\tan${args[0]}' },
   tanh: { 1: '\\tanh${args[0]}' },
 

@@ -83,6 +83,6 @@ describe('cosh', function () {
 
   it('should LaTeX cosh', function () {
     const expression = math.parse('cosh(1)')
-    assert.strictEqual(expression.toTex(), '\\cosh\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\cosh1')
   })
 })

@@ -110,6 +110,6 @@ describe('acosh', function () {
 
   it('should LaTeX acosh', function () {
     const expression = math.parse('acosh(1)')
-    assert.strictEqual(expression.toTex(), '\\cosh^{-1}\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\cosh^{-1}1')
   })
 })

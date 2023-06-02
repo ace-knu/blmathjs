@@ -118,6 +118,6 @@ describe('cos', function () {
 
   it('should LaTeX cos', function () {
     const expression = math.parse('cos(1)')
-    assert.strictEqual(expression.toTex(), '\\cos\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\cos1')
   })
 })

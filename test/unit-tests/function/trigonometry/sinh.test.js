@@ -111,6 +111,6 @@ describe('sinh', function () {
 
   it('should LaTeX sinh', function () {
     const expression = math.parse('sinh(1)')
-    assert.strictEqual(expression.toTex(), '\\sinh\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\sinh1')
   })
 })

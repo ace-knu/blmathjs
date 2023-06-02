@@ -106,6 +106,6 @@ describe('sec', function () {
 
   it('should LaTeX sec', function () {
     const expression = math.parse('sec(1)')
-    assert.strictEqual(expression.toTex(), '\\sec\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\sec1')
   })
 })

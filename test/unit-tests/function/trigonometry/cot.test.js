@@ -95,6 +95,6 @@ describe('cot', function () {
 
   it('should LaTeX cot', function () {
     const expression = math.parse('cot(1)')
-    assert.strictEqual(expression.toTex(), '\\cot\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\cot1')
   })
 })

@@ -108,6 +108,6 @@ describe('atan', function () {
 
   it('should LaTeX atan', function () {
     const expression = math.parse('atan(10)')
-    assert.strictEqual(expression.toTex(), '\\tan^{-1}\\left(10\\right)')
+    assert.strictEqual(expression.toTex(), '\\tan^{-1}10')
   })
 })

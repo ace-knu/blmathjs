@@ -94,6 +94,6 @@ describe('acsch', function () {
 
   it('should LaTeX acsch', function () {
     const expression = math.parse('acsch(2)')
-    assert.strictEqual(expression.toTex(), '\\mathrm{csch}^{-1}\\left(2\\right)')
+    assert.strictEqual(expression.toTex(), '\\mathrm{csch}^{-1}2')
   })
 })

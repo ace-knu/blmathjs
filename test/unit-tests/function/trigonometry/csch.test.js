@@ -75,6 +75,6 @@ describe('csch', function () {
 
   it('should LaTeX csch', function () {
     const expression = math.parse('csch(1)')
-    assert.strictEqual(expression.toTex(), '\\mathrm{csch}\\left(1\\right)')
+    assert.strictEqual(expression.toTex(), '\\mathrm{csch}1')
   })
 })
