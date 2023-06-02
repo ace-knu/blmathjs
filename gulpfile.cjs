@@ -24,7 +24,7 @@ const COMPILE_CJS = `${COMPILE_DIR}/cjs`
 const COMPILE_ESM = `${COMPILE_DIR}/esm` // es modules
 const COMPILE_ENTRY_LIB = `${COMPILE_CJS}/entry`
 
-const FILE = 'blmath.js'
+const FILE = 'math.js'
 
 const REF_SRC = SRC_DIR + '/'
 const REF_DIR = path.join(__dirname, '/docs')
