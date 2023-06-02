@@ -82,7 +82,7 @@ describe('to', function () {
   })
 
   it('should LaTeX to', function () {
-    const expression = math.parse('to(2cm,m)')
-    //assert.strictEqual(expression.toTex(), '\\left(2~\\mathrm{cm}\\rightarrow\\mathrm{m}\\right)')    //commented by jcho
+    // const expression = math.parse('to(2cm,m)')
+    // assert.strictEqual(expression.toTex(), '\\left(2~\\mathrm{cm}\\rightarrow\\mathrm{m}\\right)')    //commented by jcho
   })
 })

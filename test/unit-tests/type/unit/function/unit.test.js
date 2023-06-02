@@ -91,9 +91,9 @@ describe('unit', function () {
 
   it('should LaTeX unit', function () {
     const expr1 = math.parse('unit(cm)')
-    const expr2 = math.parse('unit(1,cm)')
+    // const expr2 = math.parse('unit(1,cm)')
 
     assert.strictEqual(expr1.toTex(), '\\left(\\mathrm{cm}\\right)')
-    //assert.strictEqual(expr2.toTex(), '\\left(\\left(1\\right)\\mathrm{cm}\\right)')    // commented by jcho
+    // assert.strictEqual(expr2.toTex(), '\\left(\\left(1\\right)\\mathrm{cm}\\right)')    // commented by jcho
   })
 })

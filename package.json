@@ -97,8 +97,8 @@
   "main": "./lib/cjs",
   "types": "./types/index.d.ts",
   "module": "./lib/esm",
-  "unpkg": "./lib/browser/math.js",
-  "jsdelivr": "./lib/browser/math.js",
+  "unpkg": "./lib/browser/blmath.js",
+  "jsdelivr": "./lib/browser/blmath.js",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
