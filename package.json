@@ -1,5 +1,5 @@
 {
-  "name": "blmathjs",
+  "name": "mathjs",
   "version": "11.8.0",
   "description": "Math.js is an extensive math library for JavaScript and Node.js. It features a flexible expression parser with support for symbolic computation, comes with a large set of built-in functions and constants, and offers an integrated solution to work with different data types like numbers, big numbers, complex numbers, fractions, units, and matrices.",
   "author": "Jos de Jong <wjosdejong@gmail.com> (https://github.com/josdejong)",
@@ -97,8 +97,8 @@
   "main": "./lib/cjs",
   "types": "./types/index.d.ts",
   "module": "./lib/esm",
-  "unpkg": "./lib/browser/math.js",
-  "jsdelivr": "./lib/browser/math.js",
+  "unpkg": "./lib/browser/blmath.js",
+  "jsdelivr": "./lib/browser/blmath.js",
   "exports": {
     ".": {
       "types": "./types/index.d.ts",
@@ -166,7 +166,7 @@
     "update-authors": "node ./tools/update-authors.js"
   },
   "bin": {
-    "mathjs": "./bin/cli.js"
+    "blmathjs": "./bin/cli.js"
   },
   "engines": {
     "node": ">= 14"
