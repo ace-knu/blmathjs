@@ -150,7 +150,7 @@ export const latexFunctions = {
     1: '\\left\\lfloor${args[0]}\\right\\rceil',
     2: undefined // use default template
   },
-  sign: { 1: '\\mathrm{${name}}${args[0]}' },
+  sign: { 1: '\\mathrm{${name}}\\left(${args[0]}\\right)' },
   sqrt: { 1: '\\sqrt{${args[0]}}' },
   square: { 1: '${args[0]}^2' },
   subtract: { 2: `\\left(\${args[0]}${latexOperators.subtract}\${args[1]}\\right)` },

@@ -81,10 +81,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             } else if (property[match[2]].isConstantNode) {
               latex += property[match[2]].toTex(options)
             } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {     // -1 
-              console.log("Test00", property[match[2]])
-
               const arg0 = property[match[2]].args[0]
-              console.log("Test01", arg0)
               if (arg0.isSymbolNode || arg0.isConstantNode) {
                 latex += property[match[2]].toTex(options)
               } else {
