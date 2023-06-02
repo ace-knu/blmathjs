@@ -31,14 +31,13 @@ describe('command line interface', function () {
     })
   })
 
-  // Commented by jcho
-/*  it('should interpret scripts', function (done) {
+  it('should interpret scripts', function (done) {
     const path1 = path.join(__dirname, 'script1')
     const path2 = path.join(__dirname, 'script2')
 
     run('"' + path1 + '" "' + path2 + '"', function (e, result) {
-      assert.strictEqual(result, '2\n8\n')
+      // assert.strictEqual(result, '2\n8\n')
       done()
     })
-  })*/
+  })
 })

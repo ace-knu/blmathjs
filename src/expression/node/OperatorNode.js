@@ -666,12 +666,11 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
           }
           return arg
         })
-/* jcho - 3sin(x) 3~ \sin x 방지  
+        /* jcho - 3sin(x) 3~ \sin x 방지
         if ((this.getIdentifier() === 'OperatorNode:multiply') &&
             this.implicit && implicit === 'hide') {
           return texifiedArgs.join('~')
-        }
-*/
+        } */
         return texifiedArgs.join(op)
       } else {
         // fall back to formatting as a function call

@@ -136,7 +136,7 @@ export const latexFunctions = {
     2: '\\log_{${args[1]}}\\left(${args[0]}+1\\right)'
   },
   log2: '\\log_{2}${args[0]}',
-  ln: { 1: '\\ln${args[0]}'},
+  ln: { 1: '\\ln${args[0]}' },
   mod: { 2: `\\left(\${args[0]}${latexOperators.mod}\${args[1]}\\right)` },
   multiply: { 2: `\\left(\${args[0]}${latexOperators.multiply}\${args[1]}\\right)` },
   norm: {

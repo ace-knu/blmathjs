@@ -74,24 +74,24 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
           }
         } else { // with square brackets  - 템플릿 내 args[1]이 있는 경우에 해당함
           if (isNode(property[match[2]] && property[match[2]])) {
-            //console.log("property[match[2]] :", property[match[2]])
-            //console.log("current latex", latex)
-            if (property[match[2]].isSymbolNode) {      // added by jcho
+            // console.log("property[match[2]] :", property[match[2]])
+            // console.log("current latex", latex)
+            if (property[match[2]].isSymbolNode) { // added by jcho
               latex += property[match[2]].toTex(options)
             } else if (property[match[2]].isConstantNode) {
               latex += property[match[2]].toTex(options)
-            } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {     // -1 
+            } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) { // -1
               const arg0 = property[match[2]].args[0]
               if (arg0.isSymbolNode || arg0.isConstantNode) {
                 latex += property[match[2]].toTex(options)
               } else {
                 latex += '\\left('
                 latex += property[match[2]].toTex(options)
-                latex += '\\right)'                
+                latex += '\\right)'
               }
             } else if (node.name === 'sqrtm' || node.name === 'im' || node.name === 're' || node.name === 'matrix' || node.name === 'dot') {
               latex += property[match[2]].toTex(options)
-            } else {      // 단순 심볼이 아닌 경우 괄호 추가
+            } else { // 단순 심볼이 아닌 경우 괄호 추가
               latex += '\\left('
               latex += property[match[2]].toTex(options)
               latex += '\\right)'
@@ -485,7 +485,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
         latexConverter = math[this.name].toTex
       }
 
-      //console.log("latexConverter", latexConverter)   // Test (jcho)
+      // console.log("latexConverter", latexConverter)   // Test (jcho)
       let customToTex
       switch (typeof latexConverter) {
         case 'function': // a callback function

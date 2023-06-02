@@ -175,7 +175,7 @@ describe('dotPow', function () {
   })
 
   it('should LaTeX dotPow', function () {
-    const expression = math.parse('dotPow([1,2],[3,4])')
-    //assert.strictEqual(expression.toTex(), '\\left(\\begin{bmatrix}1\\\\2\\end{bmatrix}.^\\wedge\\begin{bmatrix}3\\\\4\\end{bmatrix}\\right)')
+    // const expression = math.parse('dotPow([1,2],[3,4])')
+    // assert.strictEqual(expression.toTex(), '\\left(\\begin{bmatrix}1\\\\2\\end{bmatrix}.^\\wedge\\begin{bmatrix}3\\\\4\\end{bmatrix}\\right)')
   })
 })

@@ -98,9 +98,9 @@ describe('matrix', function () {
 
   it('should LaTeX matrix', function () {
     const expr1 = math.parse('matrix()')
-    const expr2 = math.parse('matrix([1])')
+    // const expr2 = math.parse('matrix([1])')
 
     assert.strictEqual(expr1.toTex(), '\\begin{bmatrix}\\end{bmatrix}')
-    //assert.strictEqual(expr2.toTex(), '\\left(\\begin{bmatrix}1\\end{bmatrix}\\right)')       // commented by jcho
+    // assert.strictEqual(expr2.toTex(), '\\left(\\begin{bmatrix}1\\end{bmatrix}\\right)')       // commented by jcho
   })
 })
