@@ -38,6 +38,6 @@ describe('re', function () {
 
   it('should LaTeX re', function () {
     const expression = math.parse('re(1+i)')
-    assert.strictEqual(expression.toTex(), '\\Re\\left\\lbrace1+ i\\right\\rbrace')
+    assert.strictEqual(expression.toTex(), '\\Re\\left\\lbrace1+ i\\right\\rbrace') 
   })
 })

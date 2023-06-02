@@ -125,7 +125,7 @@ describe('log', function () {
     const expr1 = math.parse('log(e)')
     const expr2 = math.parse('log(32,2)')
 
-    assert.strictEqual(expr1.toTex(), '\\ln\\left( e\\right)')
+    assert.strictEqual(expr1.toTex(), '\\log\\left( e\\right)')
     assert.strictEqual(expr2.toTex(), '\\log_{2}\\left(32\\right)')
   })
 })

@@ -121,7 +121,7 @@ export const latexFunctions = {
   dotMultiply: { 2: `\${args[0]}${latexOperators.dotMultiply}\${args[1]}` },
   dotPow: { 2: `\${args[0]}${latexOperators.dotPow}\${args[1]}` },
   exp: { 1: '\\exp\\left(${args[0]}\\right)' },
-  expm1: `e${latexOperators.pow}{\${args[0]}}-1`,
+  expm1: `\\left(e${latexOperators.pow}{\${args[0]}}-1\\right)`,
   fix: { 1: '\\mathrm{${name}}\\left(${args[0]}\\right)' },
   floor: { 1: '\\left\\lfloor${args[0]}\\right\\rfloor' },
   gcd: '\\gcd\\left(${args}\\right)',
@@ -188,7 +188,7 @@ export const latexFunctions = {
   ctranspose: { 1: `\${args[0]}${latexOperators.ctranspose}` },
   det: { 1: '\\det${args[0]}' },
   dot: { 2: '${args[0]}\\cdot${args[1]}' },
-  expm: { 1: '\\exp${args[0]}' },
+  expm: { 1: '\\left(\\exp${args[0]}\\right)' },
   inv: { 1: '${args[0]}^{-1}' },
   pinv: { 1: '${args[0]}^{+}' },
   sqrtm: { 1: `{\${args[0]}}${latexOperators.pow}{\\frac{1}{2}}` },
@@ -230,7 +230,7 @@ export const latexFunctions = {
   asin: { 1: '\\sin^{-1}${args[0]}' },
   asinh: { 1: '\\sinh^{-1}${args[0]}' },
   atan: { 1: '\\tan^{-1}${args[0]}' },
-  atan2: { 2: '\\mathrm{atan2}\\left(${args}\\right(' },
+  atan2: { 2: '\\mathrm{atan2}\\left(${args}\\right)' },
   atanh: { 1: '\\tanh^{-1}${args[0]}' },
   cos: { 1: '\\cos${args[0]}' },
   cosh: { 1: '\\cosh${args[0]}' },
@@ -275,16 +275,16 @@ export const latexFunctions = {
   },
   matrix: {
     0: '\\begin{bmatrix}\\end{bmatrix}',
-    1: '\\left(${args[0]}\\right)',
-    2: '\\left(${args[0]}\\right)'
+    1: '${args[0]}',
+    2: '${args[0]}'
   },
   sparse: {
     0: '\\begin{bsparse}\\end{bsparse}',
-    1: '\\left(${args[0]}\\right)'
+    1: '${args[0]}'
   },
   unit: {
     1: '\\left(${args[0]}\\right)',
-    2: '\\left(\\left(${args[0]}\\right)${args[1]}\\right)'
+    2: '\\left(${args[0]}\\right)${args[1]}'
   }
 
 }

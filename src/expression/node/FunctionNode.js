@@ -5,7 +5,6 @@ import { getSafeProperty, validateSafeMethod } from '../../utils/customs.js'
 import { createSubScope } from '../../utils/scope.js'
 import { factory } from '../../utils/factory.js'
 import { defaultTemplate, latexFunctions } from '../../utils/latex.js'
-import { orDependencies } from 'mathjs'
 
 const name = 'FunctionNode'
 const dependencies = [
@@ -82,7 +81,10 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             } else if (property[match[2]].isConstantNode) {
               latex += property[match[2]].toTex(options)
             } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {     // -1 
-              arg0 = property[match[2]].args[0]
+              console.log("Test00", property[match[2]])
+
+              const arg0 = property[match[2]].args[0]
+              console.log("Test01", arg0)
               if (arg0.isSymbolNode || arg0.isConstantNode) {
                 latex += property[match[2]].toTex(options)
               } else {
@@ -90,7 +92,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
                 latex += property[match[2]].toTex(options)
                 latex += '\\right)'                
               }
-            } else if (node.name === 'sqrtm') {
+            } else if (node.name === 'sqrtm' || node.name === 'im' || node.name === 're' || node.name === 'matrix' || node.name === 'dot') {
               latex += property[match[2]].toTex(options)
             } else {      // 단순 심볼이 아닌 경우 괄호 추가
               latex += '\\left('
