@@ -260,15 +260,15 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { subtract: { total: false } }
     },
     {
-      s: '-(cl*v) -> v * (-cl)', // make non-constant terms positive
+      s: '-(cl*v) -> v (-cl)', // make non-constant terms positive
       assuming: { multiply: { commutative: true }, subtract: { total: true } }
     },
     {
-      s: '-(cl*v) -> (-cl) * v', // non-commutative version, part 1
+      s: '-(cl*v) -> (-cl) v', // non-commutative version, part 1
       assuming: { multiply: { commutative: false }, subtract: { total: true } }
     },
     {
-      s: '-(v*cl) -> v * (-cl)', // non-commutative version, part 2
+      s: '-(v*cl) -> v (-cl)', // non-commutative version, part 2
       assuming: { multiply: { commutative: false }, subtract: { total: true } }
     },
     { l: '-(n1/n2)', r: '-n1/n2' },
@@ -371,11 +371,11 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
 
     // make factors positive (and undo 'make non-constant terms positive')
     {
-      s: '(-n)*n1 -> -(n*n1)',
+      s: '(-n)*n1 -> -(n n1)',
       assuming: { subtract: { total: true } }
     },
     {
-      s: 'n1*(-n) -> -(n1*n)', // in case * non-commutative
+      s: 'n1*(-n) -> -(n1 n)', // in case * non-commutative
       assuming: { subtract: { total: true }, multiply: { commutative: false } }
     },
 
