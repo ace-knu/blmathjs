@@ -251,10 +251,10 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     // temporary rules
     // Note initially we tend constants to the right because like-term
     // collection prefers the left, and we would rather collect nonconstants
-    {
-      s: 'n-n1 -> n+-n1', // temporarily replace 'subtract' so we can further flatten the 'add' operator
-      assuming: { subtract: { total: true } }
-    },
+    // {
+    //  s: 'n-n1 -> n+-n1', // temporarily replace 'subtract' so we can further flatten the 'add' operator
+    //  assuming: { subtract: { total: true } }
+    //},
     {
       s: 'n-n -> 0', // partial alternative when we can't always subtract
       assuming: { subtract: { total: false } }
@@ -272,18 +272,18 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { commutative: false }, subtract: { total: true } }
     },
     { l: '-(n1/n2)', r: '-n1/n2' },
-    { l: '-v', r: 'v * (-1)' }, // finish making non-constant terms positive
-    { l: '(n1 + n2)*(-1)', r: 'n1*(-1) + n2*(-1)', repeat: true }, // expand negations to achieve as much sign cancellation as possible
-    { l: 'n/n1^n2', r: 'n*n1^-n2' }, // temporarily replace 'divide' so we can further flatten the 'multiply' operator
+    // { l: '-v', r: 'v * (-1)' }, // finish making non-constant terms positive
+    { l: '(n1 + n2)*(-1)', r: '-(n1 + n2)', repeat: true }, // expand negations to achieve as much sign cancellation as possible
+    //{ l: 'n/n1^n2', r: 'n*n1^-n2' }, // temporarily replace 'divide' so we can further flatten the 'multiply' operator
     //{ l: 'n/n1', r: 'n*n1^-1' },
-    { l: 'n1+-n2', r: 'n1-n2' }, // jcho
+    { l: 'n1+ -n2', r: 'n1-n2' }, // jcho
     { l: 'n1-+n2', r: 'n1-n2' }, // jcho
     {
       s: '(n1*n2)^n3 -> n1^n3 * n2^n3',
       assuming: { multiply: { commutative: true } }
     },
     {
-      s: '(n1*n2)^(-1) -> n2^(-1) * n1^(-1)',
+      s: '(n1*n2)^(-1) -> 1/(n1*n2)',
       assuming: { multiply: { commutative: false } }
     },
 
@@ -350,14 +350,14 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'n^n1 * n -> n^(n1+1)',
       assuming: { divide: { total: true }, multiply: { commutative: false } }
     },
-    {
+    /*{
       s: 'n1*n3^(-n4) + n2 * n3    -> (n1 + n2*n3^(n4 +  1))*n3^(-n4)',
       assuming: { multiply: { commutative: false } }
     },
     {
       s: 'n1*n3^(-n4) + n2 * n3^n5 -> (n1 + n2*n3^(n4 + n5))*n3^(-n4)',
       assuming: { multiply: { commutative: false } }
-    },
+    },*/
     { l: 'n*cd + cd', r: '(n+1)*cd' },
     {
       s: 'cd*n + cd -> cd*(n+1)',
@@ -392,7 +392,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     },
 
     // undo temporary rules
-    // { l: '(-1) * n', r: '-n' }, // #811 added test which proved this is redundant
+    { l: '(-1) * n', r: '-n' }, // #811 added test which proved this is redundant
     { l: 'n+-n1', r: 'n-n1' }, // undo replace 'subtract'
     {
       s: 'n*(n1^-1) -> n/n1', // undo replace 'divide'; for * commutative
@@ -427,6 +427,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { associative: true } }
     },
 
+    { l: '-(n1*n2)', r: '-n1 n2'},
     { l: 'n1/(-n2)', r: '-n1/n2' }
 
   ]
