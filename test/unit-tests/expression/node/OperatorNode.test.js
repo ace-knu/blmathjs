@@ -235,7 +235,7 @@ describe('OperatorNode', function () {
       const lkey = 'l' in example ? 'l' : 'l' + paren
       assert.strictEqual(
         prefix + expr.toString({ parenthesis: paren }), prefix + example[skey])
-      assert.strictEqual(
+       assert.strictEqual(
         prefix + expr.toTex({ parenthesis: paren }), prefix + example[lkey])
     }
   }
@@ -515,8 +515,8 @@ describe('OperatorNode', function () {
           prefix + expr.toString({ parenthesis: paren, implicit: imps[i] }),
           prefix + example[skey][i])
         assert.strictEqual(
-          prefix + expr.toTex({ parenthesis: paren, implicit: imps[i] }),
-          prefix + example[lkey][i])
+         prefix + expr.toTex({ parenthesis: paren, implicit: imps[i] }),
+         prefix + example[lkey][i])
       }
     }
   }
