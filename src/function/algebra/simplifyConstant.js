@@ -359,9 +359,13 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
             const args = node.args.map(arg => foldFraction(arg, options))
 
             // If all args are numbers
-            if (!args.some(isNode)) {
+            if (!args.some(isNode)) { // sqrt(8) or log(2)
               try {
-                return _eval(node.name, args, options)
+                //console.log("Test00", node)
+                //return _eval(node.name, args, options)
+                const args2 = node.args.args.map(arg => foldFraction(arg, options))
+                node.args = _eval(node.args[0].fn.toString(), args2, options)
+                return node
               } catch (ignoreandcontinue) { }
             }
 

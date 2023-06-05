@@ -127,8 +127,8 @@ export const latexFunctions = {
   gcd: '\\gcd\\left(${args}\\right)',
   hypot: '\\hypot\\left(${args}\\right)',
   log: {
-    1: '\\log\\left(${args[0]}\\right)',
-    2: '\\log_{${args[1]}}\\left(${args[0]}\\right)'
+    1: '\\log${args[0]}',
+    2: '\\log_{${args[1]}}${args[0]}'
   },
   log10: { 1: '\\log_{10}${args[0]}' },
   log1p: {
