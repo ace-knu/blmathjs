@@ -272,11 +272,12 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { commutative: false }, subtract: { total: true } }
     },
     { l: '-(n1/n2)', r: '-n1/n2' },
+    { l: '-(n1 n2)', r: '-n1 n2' }, //jcho
     // { l: '-v', r: 'v * (-1)' }, // finish making non-constant terms positive
     { l: '(n1 + n2)*(-1)', r: '-(n1 + n2)', repeat: true }, // expand negations to achieve as much sign cancellation as possible
     //{ l: 'n/n1^n2', r: 'n*n1^-n2' }, // temporarily replace 'divide' so we can further flatten the 'multiply' operator
     //{ l: 'n/n1', r: 'n*n1^-1' },
-    { l: 'n1+ -n2', r: 'n1-n2' }, // jcho
+    { l: 'n1+-n2', r: 'n1-n2' }, // jcho
     { l: 'n1-+n2', r: 'n1-n2' }, // jcho
     {
       s: '(n1*n2)^n3 -> n1^n3 * n2^n3',
@@ -289,7 +290,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
 
     // expand nested exponentiation
     {
-      s: '(n ^ n1) ^ n2 -> n ^ (n1 * n2)',
+      s: '(n ^ n1) ^ n2 -> n ^ (n1 n2)',
       assuming: { divide: { total: true } } // 1/(1/n) = n needs 1/n to exist
     },
 
@@ -325,25 +326,25 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
 
     // collect like terms
     {
-      s: 'n+n -> 2*n',
+      s: 'n+n -> 2n',
       assuming: { add: { total: true } } // 2 = 1 + 1 needs to exist
     },
     { l: 'n+-n', r: '0' },
-    { l: 'vd*n + vd', r: 'vd*(n+1)' }, // NOTE: leftmost position is special:
-    { l: 'n3*n1 + n3*n2', r: 'n3*(n1+n2)' }, // All sub-monomials tried there.
+    { l: 'vd*n + vd', r: 'vd (n+1)' }, // NOTE: leftmost position is special:
+    //{ l: 'n3*n1 + n3*n2', r: 'n3 (n1+n2)' }, // All sub-monomials tried there.
     { l: 'n3^(-n4)*n1 +   n3  * n2', r: 'n3^(-n4)*(n1 + n3^(n4+1) *n2)' },
     { l: 'n3^(-n4)*n1 + n3^n5 * n2', r: 'n3^(-n4)*(n1 + n3^(n4+n5)*n2)' },
     // noncommutative additional cases (term collection & factoring)
     {
-      s: 'n*vd + vd -> (n+1)*vd',
+      s: 'n*vd + vd -> (n+1) vd',
       assuming: { multiply: { commutative: false } }
     },
     {
-      s: 'vd + n*vd -> (1+n)*vd',
+      s: 'vd + n*vd -> (1+n) vd',
       assuming: { multiply: { commutative: false } }
     },
     {
-      s: 'n1*n3 + n2*n3 -> (n1+n2)*n3',
+      s: 'n1*n3 + n2*n3 -> (n1+n2) n3',
       assuming: { multiply: { commutative: false } }
     },
     {
@@ -358,13 +359,13 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'n1*n3^(-n4) + n2 * n3^n5 -> (n1 + n2*n3^(n4 + n5))*n3^(-n4)',
       assuming: { multiply: { commutative: false } }
     },*/
-    { l: 'n*cd + cd', r: '(n+1)*cd' },
+    { l: 'n*cd + cd', r: '(n+1) cd' },
     {
-      s: 'cd*n + cd -> cd*(n+1)',
+      s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },
     {
-      s: 'cd + cd*n -> cd*(1+n)',
+      s: 'cd + cd*n -> cd (1+n)',
       assuming: { multiply: { commutative: false } }
     },
     simplifyConstant, // Second: before returning expressions to "standard form"
@@ -423,7 +424,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '1*n', r: 'n', imposeContext: { multiply: { commutative: true } } },
 
     {
-      s: 'n1/(n2/n3) -> (n1*n3)/n2',
+      s: 'n1/(n2/n3) -> (n1 n3)/n2',
       assuming: { multiply: { associative: true } }
     },
 

@@ -76,14 +76,18 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
           if (isNode(property[match[2]] && property[match[2]])) {
             // console.log("property[match[2]] :", property[match[2]])
             // console.log("current latex", latex)
-            if (property[match[2]].isSymbolNode) { // added by jcho
+            if (property[match[2]].isSymbolNode || property[match[2]].isConstantNode) { // added by jcho
               latex += property[match[2]].toTex(options)
-            } else if (property[match[2]].isConstantNode) {
-              latex += property[match[2]].toTex(options)
-            } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) { // -1
+            } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {
               const arg0 = property[match[2]].args[0]
-              if (arg0.isSymbolNode || arg0.isConstantNode) {
-                latex += property[match[2]].toTex(options)
+              if (arg0.isSymbolNode || arg0.isConstantNode) { // -x or -1
+                if (node.name === 'tan') {
+                  latex += '\\left('
+                  latex += property[match[2]].toTex(options)
+                  latex += '\\right)'  
+                } else {
+                  latex += property[match[2]].toTex(options)
+                }
               } else {
                 latex += '\\left('
                 latex += property[match[2]].toTex(options)
