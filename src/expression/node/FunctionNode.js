@@ -81,7 +81,8 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {
               const arg0 = property[match[2]].args[0]
               if (arg0.isSymbolNode || arg0.isConstantNode) { // -x or -1
-                if (node.name === 'tan') {
+                if (node.name === 'sin' || node.name === 'cos' || node.name === 'tan' || node.name === 'asin' || node.name === 'acos' || node.name === 'atan'
+                    || node.name === 'sinh' || node.name === 'cosh' || node.name === 'tanh' || node.name === 'asinh' || node.name === 'acosh' || node.name === 'atanh') {
                   latex += '\\left('
                   latex += property[match[2]].toTex(options)
                   latex += '\\right)'  
