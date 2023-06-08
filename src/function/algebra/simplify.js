@@ -364,10 +364,10 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },
-    {
+    /*{
       s: 'cd + cd*n -> cd (1+n)',
       assuming: { multiply: { commutative: false } }
-    },
+    },*/
     simplifyConstant, // Second: before returning expressions to "standard form"
 
     // make factors positive (and undo 'make non-constant terms positive')
@@ -417,7 +417,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { addition: { associative: true, commutative: true } }
     },
     // { l: '(n1/n2)/n3', r: 'n1/(n2*n3)' },
-    // { l: '(n*n1)/(n*n2)', r: 'n1/n2' },
+    { l: '(n*n1)/(n*n2)', r: 'n1/n2' },
 
     // simplifyConstant can leave an extra factor of 1, which can always
     // be eliminated, since the identity always commutes
@@ -551,6 +551,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     res = removeParens(res)
     const visited = {}
     let str = res.toString({ parenthesis: 'all' })
+
     while (!visited[str]) {
       visited[str] = true
       _lastsym = 0 // counter for placeholder symbols

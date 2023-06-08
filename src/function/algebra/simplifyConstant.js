@@ -361,7 +361,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
             // If all args are numbers
             if (!args.some(isNode)) { // sqrt(8) or log(2)
               try {
-                //console.log("Test00", node)
+                //console.log("Test00", node) // jcho
                 //return _eval(node.name, args, options)
                 const args2 = node.args.args.map(arg => foldFraction(arg, options))
                 node.args = _eval(node.args[0].fn.toString(), args2, options)

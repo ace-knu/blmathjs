@@ -34,6 +34,8 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
 
     let inputPos = 0 // position in the input string
     let match
+
+    // console.log("Start expandTemplate\ntemplate: ", template, "\nnode ", node)
     while ((match = regex.exec(template)) !== null) { // go through all matches
       // add everything in front of the match to the LaTeX string
       latex += template.substring(inputPos, match.index)
@@ -46,6 +48,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
         inputPos += match[0].length
         const property = node[match[1]]
 
+        // console.log("node", node, "template", template, "match1", match[0])
         if (!property) {
           throw new ReferenceError('Template: Property ' + match[1] + ' does not exist.')
         }
@@ -72,7 +75,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             default:
               throw new TypeError('Template: ' + match[1] + ' has to be a Node, String or array of Nodes')
           }
-        } else { // with square brackets  - 템플릿 내 args[1]이 있는 경우에 해당함
+        } else { // with square brackets  - 템플릿 내 args[?]이 있는 경우에 해당함
           if (isNode(property[match[2]] && property[match[2]])) {
             // console.log("property[match[2]] :", property[match[2]])
             // console.log("current latex", latex)
@@ -109,6 +112,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
     }
     latex += template.slice(inputPos) // append rest of the template
 
+    // console.log("Result of expandTemplate", latex)
     return latex
   }
 
