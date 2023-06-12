@@ -84,7 +84,8 @@ export const latexOperators = {
   unaryMinus: '-',
   bitNot: '\\~', // TODO find ideal solution
   not: '\\neg',
-  multiply: '\\cdot',
+  //multiply: '\\cdot',
+  multiply: ' ',
   divide: '\\frac', // TODO how to handle that properly?
   dotMultiply: '.\\cdot', // TODO find ideal solution
   dotDivide: '.:', // TODO find ideal solution
@@ -307,8 +308,9 @@ export function toSymbol (name, isUnit) {
     if (hasOwnProperty(latexUnits, name)) {
       return latexUnits[name]
     }
-
-    return '\\mathrm{' + escapeLatex(name) + '}'
+    // console.log("Test00", name, escapeLatex(name)) // commented by jcho for sin함수 내 심볼
+    // return '\\mathrm{' + escapeLatex(name) + '}'
+    return '{' + escapeLatex(name) + '}'
   }
 
   if (hasOwnProperty(latexSymbols, name)) {
