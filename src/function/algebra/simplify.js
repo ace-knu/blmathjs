@@ -365,6 +365,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { commutative: false } }
     },
     { l: 'cd1*n/cd2', r: 'cd1/cd2*n'}, // jcho 4 * sqrt(3) / 2 ==> 4 /2 * sqrt(3)
+    { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
     /*{
       s: 'cd + cd*n -> cd (1+n)',
       assuming: { multiply: { commutative: false } }
