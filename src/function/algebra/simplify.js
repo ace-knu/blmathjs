@@ -364,6 +364,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },
+    { l: 'cd1*ce1/cd2', r: 'cd1/cd2*ce1'}, // jcho 4 * sqrt(3) / 2 ==> 4 /2 * sqrt(3)
     /*{
       s: 'cd + cd*n -> cd (1+n)',
       assuming: { multiply: { commutative: false } }
@@ -375,6 +376,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: '(-n)*n1 -> -(n n1)',
       assuming: { subtract: { total: true } }
     },
+    { l: 'cd1/cd2*ce1', r: 'cd1*ce1/cd2'}, // jcho 2/3*sqrt(3) ==> 2*sqrt(3)/3
     {
       s: 'n1*(-n) -> -(n1 n)', // in case * non-commutative
       assuming: { subtract: { total: true }, multiply: { commutative: false } }
