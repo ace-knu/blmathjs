@@ -377,7 +377,11 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: '(-n)*n1 -> -(n n1)',
       assuming: { subtract: { total: true } }
     },
-    { l: 'cd1/cd2*n', r: 'cd1*n/cd2'}, // jcho 2/3*sqrt(3) ==> 2*sqrt(3)/3
+    { l: 've/ce', r: '1/ce*ve' }, // jcho sqrt(x)/3 ==> 1/3*sqrt(x)
+    { l: '1/cd1*cd2', r: 'cd2/cd1' },
+    { l: '(1/cd)*ce', r: 'ce/cd' }, // 1/2*sqrt(3) ==> sqrt(3)/2
+    { l: '(1/cd)*pi', r: 'pi/cd' },
+    { l: '(1/cd)*e', r: 'e/cd' },
     {
       s: 'n1*(-n) -> -(n1 n)', // in case * non-commutative
       assuming: { subtract: { total: true }, multiply: { commutative: false } }
