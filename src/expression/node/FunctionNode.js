@@ -35,6 +35,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
     let inputPos = 0 // position in the input string
     let match
 
+    // console.log("=================================================")
     // console.log("Start expandTemplate\ntemplate: ", template, "\nnode ", node)
     while ((match = regex.exec(template)) !== null) { // go through all matches
       // add everything in front of the match to the LaTeX string
@@ -48,7 +49,8 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
         inputPos += match[0].length
         const property = node[match[1]]
 
-        // console.log("node", node, "template", template, "match1", match[0])
+        // console.log("-------------------")
+        // console.log("[node] ", node, "\n[template] ", template, "\n[match1] ", match[0])
         if (!property) {
           throw new ReferenceError('Template: Property ' + match[1] + ' does not exist.')
         }
@@ -77,8 +79,8 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
           }
         } else { // with square brackets  - 템플릿 내 args[?]이 있는 경우에 해당함
           if (isNode(property[match[2]] && property[match[2]])) {
-            // console.log("property[match[2]] :", property[match[2]])
-            // console.log("current latex", latex)
+            // console.log("[property[match[2]]] :", property[match[2]])
+            // console.log("[current latex] ", latex)
             if (property[match[2]].isSymbolNode || property[match[2]].isConstantNode) { // added by jcho
               latex += property[match[2]].toTex(options)
             } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {
@@ -97,7 +99,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
                 latex += property[match[2]].toTex(options)
                 latex += '\\right)'
               }
-            } else if (node.name === 'sqrtm' || node.name === 'im' || node.name === 're' || node.name === 'matrix' || node.name === 'dot') {
+            } else if (node.name === 'sqrt' || node.name === 'sqrtm' || node.name === 'im' || node.name === 're' || node.name === 'matrix' || node.name === 'dot') {
               latex += property[match[2]].toTex(options)
             } else { // 단순 심볼이 아닌 경우 괄호 추가
               latex += '\\left('

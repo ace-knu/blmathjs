@@ -413,7 +413,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     },
     {
       s: 'n^-1 -> 1/n',
-      assuming: { multiply: { commutative: true } } // o.w. / not conventional
+      // assuming: { multiply: { commutative: true } } // o.w. / not conventional
     },
     { l: 'n^1', r: 'n' }, // can be produced by power cancellation
     {

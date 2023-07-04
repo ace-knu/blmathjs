@@ -642,12 +642,20 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
             // op contains '\\frac' at this point
             return op + '{' + lhsTex + '}' + '{' + rhsTex + '}'
           case 'OperatorNode:pow':
-            lhsTex = '{' + lhsTex + '}'
-            rhsTex = '{' + rhsTex + '}'
-            switch (lhsIdentifier) {
-              case 'ConditionalNode': //
-              case 'OperatorNode:divide':
-                lhsTex = `\\left(${lhsTex}\\right)`
+            if (lhs.isFunctionNode && (lhs.name === 'sin' || lhs.name === 'cosh')) { // 삼각함수이면 (\sin x)^2 ==> \sin ^{2} x
+              // console.log("lhs:", lhs, "\nlhsTex:", lhsTex)
+              // console.log("rhs:", rhs, "\nrhsTex:", rhsTex)
+              const tmp = lhsTex.split(lhs.name)
+
+              return tmp[0] + lhs.name + '^{' + rhsTex + '}' + tmp[1]
+            } else {
+              lhsTex = '{' + lhsTex + '}'
+              rhsTex = '{' + rhsTex + '}'
+              switch (lhsIdentifier) {
+                case 'ConditionalNode':
+                case 'OperatorNode:divide':
+                  lhsTex = `\\left(${lhsTex}\\right)`
+              }
             }
             break
           case 'OperatorNode:multiply':
