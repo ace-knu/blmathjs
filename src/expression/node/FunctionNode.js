@@ -153,7 +153,13 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
     static name = name
     get type () { return name }
     get isFunctionNode () { return true }
-
+    get isTrigonometric () { 
+      const fn_name = this.fn.name
+      return fn_name === 'sin' || fn_name === 'cos' || fn_name === 'tan' 
+            || fn_name === 'sinh' || fn_name === 'cosh' || fn_name === 'tanh'
+            || fn_name === 'cot' || fn_name === 'csc' || fn_name === 'sec'
+            || fn_name === 'coth' || fn_name === 'csch' || fn_name === 'sech'
+          }
     /**
      * Compile a node into a JavaScript function.
      * This basically pre-calculates as much as possible and only leaves open

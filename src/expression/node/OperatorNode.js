@@ -642,7 +642,7 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
             // op contains '\\frac' at this point
             return op + '{' + lhsTex + '}' + '{' + rhsTex + '}'
           case 'OperatorNode:pow':
-            if (lhs.isFunctionNode && (lhs.name === 'sin' || lhs.name === 'cosh')) { // 삼각함수이면 (\sin x)^2 ==> \sin ^{2} x
+            if (lhs.isFunctionNode && lhs.isTrigonometric) { // 삼각함수이면 (\sin x)^2 ==> \sin ^{2} x
               // console.log("lhs:", lhs, "\nlhsTex:", lhsTex)
               // console.log("rhs:", rhs, "\nrhsTex:", rhsTex)
               const tmp = lhsTex.split(lhs.name)
