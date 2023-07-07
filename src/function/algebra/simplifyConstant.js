@@ -406,6 +406,10 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           args = allChildren(node, options.context)
           args = args.map(arg => foldFraction(arg, options))
 
+          if (fn === 'divide') { // 약분
+            //console.log("Debug0", args[0])
+            //console.log("Debug1", args[1])
+          }
           if (isCommutative(fn, options.context)) {
             // commutative binary operator
             const consts = []
