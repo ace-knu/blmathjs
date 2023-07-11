@@ -271,7 +271,9 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: '-(v*cl) -> v (-cl)', // non-commutative version, part 2
       assuming: { multiply: { commutative: false }, subtract: { total: true } }
     },
-    { l: '-(n1/n2)', r: '-n1/n2' },
+    //{ l: '-(n1/n2)', r: '-n1/n2' },
+    { l: '(-n1)/n2', r: '-(n1/n2)' },
+    { l: 'n1/(-n2)', r: '-(n1/n2)' },
     { l: '-(n1 n2)', r: '-n1 n2' }, //jcho
     // { l: '-v', r: 'v * (-1)' }, // finish making non-constant terms positive
     { l: '(n1 + n2)*(-1)', r: '-(n1 + n2)', repeat: true }, // expand negations to achieve as much sign cancellation as possible
