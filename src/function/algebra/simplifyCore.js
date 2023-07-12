@@ -137,8 +137,52 @@ export const createSimplifyCore = /* #__PURE__ */ factory(name, dependencies, ({
         }
         node = new OperatorNode(op, node.name, node.args)
       } else {
-        return new FunctionNode(
-          _simplifyCore(node.fn), node.args.map(n => _simplifyCore(n, options)))
+        if ((node.name === 'sqrt') && (node.args[0].isConstantNode)) { // sqrt(4) ==> 2, sqrt(12) ==> 2 sqrt(3)
+          let inner = node.args[0].value
+          //console.log('==================================')
+          //console.log("Test00", node)
+          let primes = []
+          for (let i = 2; i <= inner; i++) {
+            while (inner % i === 0) {
+              inner /= i;
+              primes.push(i);
+            }
+            if (inner === 1) break;
+          }         
+          //console.log("PrimeNumber", primes)
+          inner = node.args[0].value
+          let outer = 1;
+          let prevNum = 0;
+          primes.forEach((number) => {
+            if (prevNum === 0) {
+              prevNum = number
+            } else if (prevNum === number) {
+              outer = outer * number
+              inner = inner / (number*number)
+              prevNum = 0
+            } else {
+              prevNum = number
+            }
+          })
+          //console.log("outer", outer)
+          //console.log("inner", inner)
+          if (inner === 1) {
+            return new ConstantNode(outer)
+          } else if (outer === 1) {
+            return node
+          } else {
+            const arg_0 = new ConstantNode(outer)
+            const arg_1_1 = new ConstantNode(inner)
+            const arg_1 = new FunctionNode(node.fn, [arg_1_1])
+
+            const newNode = new OperatorNode('*', 'multiply', [arg_0, arg_1], node.implicit)
+            //console.log("DEBUG", newNode.toString())
+            return newNode
+          }
+        } else {
+          return new FunctionNode(
+            _simplifyCore(node.fn), node.args.map(n => _simplifyCore(n, options)))
+        }
       }
     }
     if (isOperatorNode(node) && node.isUnary()) {
