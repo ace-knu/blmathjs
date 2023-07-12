@@ -281,6 +281,10 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     //{ l: 'n/n1', r: 'n*n1^-1' },
     { l: 'n1+-n2', r: 'n1-n2' }, // jcho
     { l: 'n1-+n2', r: 'n1-n2' }, // jcho
+    { l: '(n+cd1)-cd2', r: 'n+(cd1-cd2)' },
+    { l: '(n+cd1)+cd2', r: 'n+(cd1+cd2)' },
+    { l: '(n-cd1)-cd2', r: 'n-(cd1+cd2)' },
+    { l: '(n-cd1)+cd2', r: 'n-(cd1-cd2)' },
     {
       s: '(n1*n2)^n3 -> n1^n3 * n2^n3',
       assuming: { multiply: { commutative: true } }
@@ -380,6 +384,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { subtract: { total: true } }
     },
     { l: '(-n1)/n2', r: '-(n1/n2)' },
+    { l: 'n1/(-n2)', r: '-(n1/n2)' },
     { l: 'vl/ce', r: '1/ce*vl' }, // jcho sqrt(x)/3 ==> 1/3*sqrt(x)
     { l: '1/cd1*cd2', r: 'cd2/cd1' },
     { l: '(1/cd)*ce', r: 'ce/cd' }, // 1/2*sqrt(3) ==> sqrt(3)/2
