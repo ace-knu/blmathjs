@@ -290,7 +290,8 @@ export const latexFunctions = {
 
 }
 
-export const defaultTemplate = '\\mathrm{${name}}\\left(${args}\\right)'
+//export const defaultTemplate = '\\mathrm{${name}}\\left(${args}\\right)'
+export const defaultTemplate = '${name}\\left(${args}\\right)'
 
 const latexUnits = {
   deg: '^\\circ'
@@ -310,7 +311,7 @@ export function toSymbol (name, isUnit) {
     }
     // console.log("Test00", name, escapeLatex(name)) // commented by jcho for sin함수 내 심볼
     // return '\\mathrm{' + escapeLatex(name) + '}'
-    return '{' + escapeLatex(name) + '}'
+    return escapeLatex(name)
   }
 
   if (hasOwnProperty(latexSymbols, name)) {

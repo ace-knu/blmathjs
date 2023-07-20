@@ -275,6 +275,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(-n1)/n2', r: '-(n1/n2)' },
     { l: 'n1/(-n2)', r: '-(n1/n2)' },
     { l: '-(n1 n2)', r: '-n1 n2' }, //jcho
+    { l: '(-n1) n2', r: '-(n1 n2)' },
     // { l: '-v', r: 'v * (-1)' }, // finish making non-constant terms positive
     { l: '(n1 + n2)*(-1)', r: '-(n1 + n2)', repeat: true }, // expand negations to achieve as much sign cancellation as possible
     //{ l: 'n/n1^n2', r: 'n*n1^-n2' }, // temporarily replace 'divide' so we can further flatten the 'multiply' operator

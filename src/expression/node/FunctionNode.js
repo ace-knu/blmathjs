@@ -86,7 +86,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {
               const arg0 = property[match[2]].args[0]
               if (arg0.isSymbolNode || arg0.isConstantNode) { // -x or -1
-                if (node.isFunctionNode && node.isTrigonometric) {
+                if (node.isFunctionNode && (node.isTrigonometric || node.isLog)) {
                   latex += '\\left('
                   latex += property[match[2]].toTex(options)
                   latex += '\\right)'  
@@ -159,6 +159,11 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             || fn_name === 'cot' || fn_name === 'csc' || fn_name === 'sec'
             || fn_name === 'coth' || fn_name === 'csch' || fn_name === 'sech'
           }
+    get isLog () {
+      const fn_name = this.fn.name
+      return fn_name === 'log' || fn_name === 'log10' || fn_name === 'log2' || fn_name === 'log1p'
+    }
+
     /**
      * Compile a node into a JavaScript function.
      * This basically pre-calculates as much as possible and only leaves open
