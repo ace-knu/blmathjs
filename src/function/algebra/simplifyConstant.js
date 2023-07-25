@@ -407,8 +407,20 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           args = args.map(arg => foldFraction(arg, options))
 
           if (fn === 'divide') { // 약분
-            // console.log("Debug0", args[0])
-            // console.log("Debug1", args[1])
+            var coefficients = []
+
+            coeffFromPoly(args[0], coefficients)
+            coeffFromPoly(args[1], coefficients)
+
+            //console.log("Coefficients", coefficients)
+
+            const gcd = findGCD(coefficients, coefficients.length)
+
+            //console.log("gcd = ", gcd)
+            if (gcd > 1) {
+              reduceFraction(args[0], gcd)
+              reduceFraction(args[1], gcd)
+            }
           }
           if (isCommutative(fn, options.context)) {
             // commutative binary operator
@@ -485,4 +497,94 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
   }
 
   return simplifyConstant
+
+  function coeffFromPoly(node, coefficients) {
+    //console.log("coeffFromPoly", node)
+
+    if (node.isOperatorNode && node.isBinary() && (node.fn === 'add' || node.fn === 'subtract')){
+      coeffFromPoly(node.args[0], coefficients)
+      coeffFromPoly(node.args[1], coefficients)
+    } else if (node.isOperatorNode && node.isUnary) {
+      coeffFromPoly(node.args[0], coefficients)
+    } else if (node.isOperatorNode && node.isBinary() && node.fn === 'multiply') {
+      const args0 = node.args[0]
+      if (args0.isConstantNode) {
+        coefficients.push(args0.value)
+      } else if (args0.isOperatorNode && args0.isUnary) {
+        if (args0.args[0].isConstantNode) {
+          coefficients.push(args0.args[0].value)
+        } else if (args0.isSymbolNode || args0.isFunctionNode) {
+          coefficients.push(1)
+        }
+      }  
+
+      const args1 = node.args[1]
+      if (args1.isConstantNode) {
+        coefficients.push(args1.value)
+      } else if (args1.isOperatorNode && args1.isUnary) {
+        if (args1.args[0].isConstantNode) {
+          coefficients.push(args1.args[0].value)
+        } else if (args1.isSymbolNode || args1.isFunctionNode) {
+          coefficients.push(1)
+        }
+      }  
+
+    } else if (node.isConstantNode) {
+      coefficients.push(node.value)
+    } else if (node.isSymbolNode || node.isFunctionNode) {
+      coefficients.push(1)
+    } else if (node.isFraction) {
+      coefficients.push(node.n)
+    }
+  }
+
+  function reduceFraction(node, gcd)
+  {
+    if (node.isOperatorNode && node.isBinary() && (node.fn === 'add' || node.fn === 'subtract')){
+      reduceFraction(node.args[0], gcd)
+      reduceFraction(node.args[1], gcd)
+    } else if (node.isOperatorNode && node.isUnary) {
+      reduceFraction(node.args[0], gcd)
+    } else if (node.isOperatorNode && node.isBinary() && node.fn === 'multiply') {
+      const args0 = node.args[0]
+      if (args0.isConstantNode) {
+        args0.value /= gcd
+      } else if (args0.isOperatorNode && args0.isUnary) {
+        if (args0.args[0].isConstantNode) {
+          args0.args[0].value /= gcd
+        }
+      }  
+
+      const args1 = node.args[1]
+      if (args1.isConstantNode) {
+        args1.value /= gcd
+      } else if (args1.isOperatorNode && args1.isUnary) {
+        if (args1.args[0].isConstantNode) {
+          args1.args[0].value /= gcd
+        }
+      }  
+
+    } else if (node.isConstantNode) {
+      node.value /= gcd
+    } else if (node.isFraction) {
+      node.n /= gcd
+    }
+  }
+
+  function gcd(a, b) {
+    if (a == 0)
+      return b;
+    return gcd(b % a, a);
+  }
+  function findGCD(arr, n) {
+    let result = arr[0]
+    for (let i = 1; i < n; i++) {
+      result = gcd(arr[i], result);
+
+      if (result == 1) {
+        return 1;
+      }
+    }
+    return result;
+  }
 })
