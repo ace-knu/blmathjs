@@ -381,7 +381,34 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
               }
               return matrix(sz)
             }
+            if (node.isTrigonometric || node.isLog) {
+              const args0 = node.args[0]
+              if (args0.isOperatorNode) {
+                if (args0.isBinary && (args0.fn === 'add') || (args0.fn === 'subtract')) {
+                  // Polynomial.
+                  // Nothing to do.
+                } else if (args0.isBinary) {
+                  if (args0.fn === 'multiply') {  // sin((1/2)*x)
+                    // console.log("TEST000", args0)
+                    const args00 = args0.args[0]
+                    const args01 = args0.args[1]
+                    if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
+                      const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
+                      const new_args0 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
+                      return new FunctionNode(node.name, [new_args0])
+                    }
+                  } else if (args0.fn === 'divide') {
+                    
+                  } else if (args0.fn === 'pow') {
 
+                  }
+                } else if (args0.isUnary && args0.fn === 'unaryMinus') {
+
+                } else {
+                  // console.log("Error - Display an expression in trigonometric function\n", args0)
+                }
+              }
+            } 
             // Convert all args to nodes and construct a symbolic function call
             return new FunctionNode(node.name, args.map(_ensureNode))
           } else {

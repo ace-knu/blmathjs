@@ -371,12 +371,26 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },*/
-    { l: 'cd1*n/cd2', r: 'cd1/cd2*n'}, // jcho 4 * sqrt(3) / 2 ==> 4 /2 * sqrt(3)
+    { l: 'cd1*n/cd2', r: '(cd1/cd2)*n'}, // jcho 4 * sin(x) / 3 ==> (4 /3) * sin(x)
     { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
     /*{
       s: 'cd + cd*n -> cd (1+n)',
       assuming: { multiply: { commutative: false } }
     },*/
+
+    { l: 'vl/ce', r: '1/ce*vl' }, // jcho sqrt(x)/3 ==> 1/3*sqrt(x)
+    { l: 'vl^cl/ce', r: '1/ce*vl^cl' },
+    { l: '1/cd1*cd2', r: 'cd2/cd1' },
+
+    { l: '(cd1/cd2)*ce', r: '(cd1*ce)/cd2' }, // (3/2)*sqrt(2) ==> (3 * sqrt(2))/ 2
+
+   // { l: '(1/cd)*ce', r: 'ce/cd' }, // 1/2*sqrt(3) ==> sqrt(3)/2
+
+    { l: '(1/cd)*pi', r: 'pi/cd' },
+    { l: '(1/cd)*e', r: 'e/cd' },
+    { l: '(cd1*pi)/cd2', r: 'cd1/cd2*pi' },
+    { l: '(cd1*e)/cd2', r: 'cd1/cd2*e' },
+
     simplifyConstant, // Second: before returning expressions to "standard form"
 
     // make factors positive (and undo 'make non-constant terms positive')
@@ -386,11 +400,8 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     },
     { l: '(-n1)/n2', r: '-(n1/n2)' },
     { l: 'n1/(-n2)', r: '-(n1/n2)' },
-    { l: 'vl/ce', r: '1/ce*vl' }, // jcho sqrt(x)/3 ==> 1/3*sqrt(x)
-    { l: '1/cd1*cd2', r: 'cd2/cd1' },
-    { l: '(1/cd)*ce', r: 'ce/cd' }, // 1/2*sqrt(3) ==> sqrt(3)/2
-    { l: '(1/cd)*pi', r: 'pi/cd' },
-    { l: '(1/cd)*e', r: 'e/cd' },
+
+   
     {
       s: 'n1*(-n) -> -(n1 n)', // in case * non-commutative
       assuming: { subtract: { total: true }, multiply: { commutative: false } }
