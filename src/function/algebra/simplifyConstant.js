@@ -358,6 +358,8 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           if (operatorFunctions.indexOf(node.name) === -1) {
             const args = node.args.map(arg => foldFraction(arg, options))
 
+            console.log("TEST000", node)
+
             // If all args are numbers
             if (!args.some(isNode)) { // sqrt(8) or log(2)
               try {
@@ -381,7 +383,8 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
               }
               return matrix(sz)
             }
-            if (node.isTrigonometric || node.isLog) {
+
+            if (node.isTrigonometric) {
               const args0 = node.args[0]
               if (args0.isOperatorNode) {
                 if (args0.isBinary && (args0.fn === 'add') || (args0.fn === 'subtract')) {
@@ -389,7 +392,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                   // Nothing to do.
                 } else if (args0.isBinary) {
                   if (args0.fn === 'multiply') {  // sin((1/2)*x)
-                    // console.log("TEST000", args0)
+                    console.log("TEST100", args0)
                     const args00 = args0.args[0]
                     const args01 = args0.args[1]
                     if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
@@ -398,7 +401,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                       return new FunctionNode(node.name, [new_args0])
                     }
                   } else if (args0.fn === 'divide') {
-                    
+
                   } else if (args0.fn === 'pow') {
 
                   }
