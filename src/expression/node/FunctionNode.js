@@ -158,6 +158,10 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             || fn_name === 'sinh' || fn_name === 'cosh' || fn_name === 'tanh'
             || fn_name === 'cot' || fn_name === 'csc' || fn_name === 'sec'
             || fn_name === 'coth' || fn_name === 'csch' || fn_name === 'sech'
+            || fn_name === 'asin' || fn_name === 'acos' || fn_name === 'atan' 
+            || fn_name === 'asinh' || fn_name === 'acosh' || fn_name === 'atanh'
+            || fn_name === 'acot' || fn_name === 'acsc' || fn_name === 'asec'
+            || fn_name === 'acoth' || fn_name === 'acsch' || fn_name === 'asech'
           }
     get isLog () {
       const fn_name = this.fn.name
