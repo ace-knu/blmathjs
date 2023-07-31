@@ -358,8 +358,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           if (operatorFunctions.indexOf(node.name) === -1) {
             const args = node.args.map(arg => foldFraction(arg, options))
 
-            console.log("TEST000", node)
-
+            //console.log("TEST000", node)
             // If all args are numbers
             if (!args.some(isNode)) { // sqrt(8) or log(2)
               try {
@@ -392,7 +391,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                   // Nothing to do.
                 } else if (args0.isBinary) {
                   if (args0.fn === 'multiply') {  // sin((1/2)*x)
-                    console.log("TEST100", args0)
+                    // console.log("TEST100", args0)
                     const args00 = args0.args[0]
                     const args01 = args0.args[1]
                     if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
@@ -401,8 +400,6 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                       return new FunctionNode(node.name, [new_args0])
                     }
                   } else if (args0.fn === 'divide') {
-
-                  } else if (args0.fn === 'pow') {
 
                   }
                 } else if (args0.isUnary && args0.fn === 'unaryMinus') {
@@ -451,7 +448,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
               reduceFraction(args[0], gcd)
               reduceFraction(args[1], gcd)
             }
-          }
+          } 
           if (isCommutative(fn, options.context)) {
             // commutative binary operator
             const consts = []
@@ -479,6 +476,33 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           }
         } else {
           // non-associative binary operator
+          if (fn === 'pow') {
+            //console.log("TEST123", node)
+            const args0 = node.args[1]
+            if (args0.isOperatorNode) {
+              if (args0.isBinary && (args0.fn === 'add') || (args0.fn === 'subtract')) {
+                // Polynomial.
+                // Nothing to do.
+              } else if (args0.isBinary) {
+                if (args0.fn === 'multiply') {  // sin((1/2)*x)
+                  //console.log("TEST200", args0)
+                  const args00 = args0.args[0]
+                  const args01 = args0.args[1]
+                  if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
+                    const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
+                    const new_args0 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
+                    return new OperatorNode('^', 'pow', [node.args[0], new_args0])
+                  }
+                } else if (args0.fn === 'divide') {
+
+                }
+              } else if (args0.isUnary && args0.fn === 'unaryMinus') {
+
+              } else {
+                // console.log("Error - Display an expression in trigonometric function\n", args0)
+              }
+            }
+          }
           args = node.args.map(arg => foldFraction(arg, options))
           res = foldOp(fn, args, makeNode, options)
         }
