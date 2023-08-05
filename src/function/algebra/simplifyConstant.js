@@ -396,11 +396,13 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                     const args00 = args0.args[0]
                     const args01 = args0.args[1]
                     if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
-                      const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
-                      const new_args0 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
-                      return new FunctionNode(node.name, [new_args0])
+                      if (args00.args[0].isConstantNode && args00.args[0].value === 1) {
+                        const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
+                        const new_args0 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
+                        return new FunctionNode(node.name, [new_args0])
+                      }
                     } else if (args00.isOperatorNode && args00.isUnary() && args00.fn === 'unaryMinus') {
-                      console.log("TEST110", args00)
+                      // console.log("TEST110", args00)
                     }
                   } else if (args0.fn === 'divide') {
 
@@ -413,10 +415,12 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                     const args00 = args1.args[0]
                     const args01 = args1.args[1]
                     if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
-                      const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
-                      const new_args1 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
-                      const new_arg = new OperatorNode('-', 'unaryMinus', [new_args1])
-                      return new FunctionNode(node.name, [new_arg])
+                      if (args00.args[0].isConstantNode && args00.args[0].value === 1) {
+                        const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
+                        const new_args1 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
+                        const new_arg = new OperatorNode('-', 'unaryMinus', [new_args1])
+                        return new FunctionNode(node.name, [new_arg])
+                      }
                     } else if (args00.isOperatorNode && args00.isUnary() && args00.fn === 'unaryMinus') {
                       //console.log("TEST210", args00)
                     }
@@ -506,9 +510,11 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                   const args00 = args0.args[0]
                   const args01 = args0.args[1]
                   if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
-                    const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
-                    const new_args0 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
-                    return new OperatorNode('^', 'pow', [node.args[0], new_args0])
+                    if (args00.args[0].isConstantNode && args00.args[0].value === 1) {
+                      const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
+                      const new_args0 = new OperatorNode('/', 'divide', [new_args00, args00.args[1]])
+                      return new OperatorNode('^', 'pow', [node.args[0], new_args0])
+                    }
                   }
                 } else if (args0.fn === 'divide') {
 

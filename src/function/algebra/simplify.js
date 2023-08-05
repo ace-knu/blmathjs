@@ -371,14 +371,14 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },*/
-    { l: 'cd1*n/cd2', r: '(cd1/cd2)*n'}, // jcho 4 * sin(x) / 3 ==> (4 /3) * sin(x)
+    { l: 'cd1*n/cd2', r: '(cd1/cd2)*n'}, // 4 * sin(x) / 3 ==> (4 /3) * sin(x)
     { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
     /*{
       s: 'cd + cd*n -> cd (1+n)',
       assuming: { multiply: { commutative: false } }
     },*/
 
-    { l: 'vl/ce', r: '1/ce*vl' }, // jcho sqrt(x)/3 ==> 1/3*sqrt(x)
+    { l: 'vl/ce', r: '1/ce*vl' }, // sqrt(x)/3 ==> 1/3*sqrt(x)
     { l: 'vl^cl/ce', r: '1/ce*vl^cl' },
     { l: '1/cd1*cd2', r: 'cd2/cd1' },
 
@@ -389,7 +389,8 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(1/cd)*pi', r: 'pi/cd' },
     { l: '(1/cd)*e', r: 'e/cd' },
     { l: '(cd1*pi)/cd2', r: 'cd1/cd2*pi' },
-    { l: '(cd1*e)/cd2', r: 'cd1/cd2*e' },
+    { l: '(pi*ve)/cd', r: 'pi/cd*ve'},
+    { l: '(cd1*ve)/cd2', r: 'cd1/cd2*ve' },
 
     simplifyConstant, // Second: before returning expressions to "standard form"
 
