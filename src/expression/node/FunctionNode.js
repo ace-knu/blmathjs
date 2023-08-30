@@ -510,6 +510,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
         latexConverter = math[this.name].toTex
       }
 
+      // console.log("node: ", this)
       // console.log("latexConverter", latexConverter)   // Test (jcho)
       let customToTex
       switch (typeof latexConverter) {

@@ -337,7 +337,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { add: { total: true } } // 2 = 1 + 1 needs to exist
     },
     { l: 'n+-n', r: '0' },
-    { l: 'vd*n + vd', r: 'vd (n+1)' }, // NOTE: leftmost position is special:
+    //{ l: 'vd*n + vd', r: 'vd (n+1)' }, // NOTE: leftmost position is special:
     //{ l: 'n3*n1 + n3*n2', r: 'n3 (n1+n2)' }, // All sub-monomials tried there.
     { l: 'n3^(-n4)*n1 +   n3  * n2', r: 'n3^(-n4)*(n1 + n3^(n4+1) *n2)' },
     { l: 'n3^(-n4)*n1 + n3^n5 * n2', r: 'n3^(-n4)*(n1 + n3^(n4+n5)*n2)' },
@@ -350,10 +350,10 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'vd + n*vd -> (1+n) vd',
       assuming: { multiply: { commutative: false } }
     },
-    {
+    /*{
       s: 'n1*n3 + n2*n3 -> (n1+n2) n3',
       assuming: { multiply: { commutative: false } }
-    },
+    },*/
     {
       s: 'n^n1 * n -> n^(n1+1)',
       assuming: { divide: { total: true }, multiply: { commutative: false } }
