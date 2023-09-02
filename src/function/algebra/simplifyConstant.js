@@ -456,11 +456,17 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
 
           if (fn === 'divide') { // 약분
             var coefficients = []
+            var coeff = []
 
-            coeffFromPoly(args[0], coefficients)
-            coeffFromPoly(args[1], coefficients)
+            //coeffFromPoly(args[0], coefficients)
+            //coeffFromPoly(args[1], coefficients)
 
-            //console.log("Coefficients", coefficients)
+            coefficients.push(coeffFromPoly2(args[0]))
+            coefficients.push(coeffFromPoly2(args[1]))
+
+            coeff.concat.apply(coeff, coefficients)
+
+            console.log("Coefficients", coeff)
 
             const gcd = findGCD(coefficients, coefficients.length)
 
@@ -576,43 +582,93 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
   return simplifyConstant
 
   function coeffFromPoly(node, coefficients) {
-    //console.log("coeffFromPoly", node)
+    console.log("coeffFromPoly", node)
 
     if (node.isOperatorNode && node.isBinary() && (node.fn === 'add' || node.fn === 'subtract')){
       coeffFromPoly(node.args[0], coefficients)
       coeffFromPoly(node.args[1], coefficients)
-    } else if (node.isOperatorNode && node.isUnary) {
+    } else if (node.isOperatorNode && node.isUnary()) {
+      //console.log("coeffFromPoly unary")
       coeffFromPoly(node.args[0], coefficients)
     } else if (node.isOperatorNode && node.isBinary() && node.fn === 'multiply') {
       const args0 = node.args[0]
       if (args0.isConstantNode) {
         coefficients.push(args0.value)
-      } else if (args0.isOperatorNode && args0.isUnary) {
+      } else if (args0.isOperatorNode && args0.isUnary()) {
         if (args0.args[0].isConstantNode) {
           coefficients.push(args0.args[0].value)
         } else if (args0.isSymbolNode || args0.isFunctionNode) {
           coefficients.push(1)
         }
-      }  
+      } else if (args0.isOperatorNode && args0.isBinary() && args0.fn === 'multiply') {
+        coeffFromPoly(args0.args[0], coefficients)
+        coeffFromPoly(args0.args[1], coefficients)
+      }
 
       const args1 = node.args[1]
       if (args1.isConstantNode) {
         coefficients.push(args1.value)
-      } else if (args1.isOperatorNode && args1.isUnary) {
+      } else if (args1.isOperatorNode && args1.isUnary()) {
         if (args1.args[0].isConstantNode) {
           coefficients.push(args1.args[0].value)
         } else if (args1.isSymbolNode || args1.isFunctionNode) {
           coefficients.push(1)
         }
-      }  
+      } else if (args1.isOperatorNode && args1.isBinary() && args1.fn === 'multiply') {
+        coeffFromPoly(args1.args[0], coefficients)
+        coeffFromPoly(args1.args[1], coefficients)
+      }
 
     } else if (node.isConstantNode) {
       coefficients.push(node.value)
-    } else if (node.isSymbolNode || node.isFunctionNode) {
+    } else if (node.isFunctionNode) {
       coefficients.push(1)
-    } else if (node.isFraction) {
-      coefficients.push(node.n)
     }
+  }
+
+  function extractCoeff(node) { // 단항에 대한 상수 추출
+    let result = 1
+    console.log("extractCoeff")
+
+    if (node.isOperatorNode && node.isBinary()) {
+      if (node.fn === 'multiply') {
+        result *= extractCoeff(node.args[0])
+        result *= extractCoeff(node.args[1])
+      } 
+    } else if (node.isConstantNode) {
+        return node.value
+    } else if (node.isSymbolNode || node.isFunctionNode) {
+        return 1;
+    }
+  
+    return result
+  }
+
+  function coeffFromPoly2(node) {
+    let result = []
+    console.log("coeffFromPoly2", node)
+
+    if (node.isOperatorNode && node.isBinary()) {
+      if (node.fn === 'add' || node.fn === 'subtract') {
+        result.concat(coeffFromPoly2(node.args[0]))
+        result.concat(coeffFromPoly2(node.args[1]))
+      } else if (node.fn === 'multiply') {
+        result.push(extractCoeff(node))
+      } else if (node.fn === 'pow') {
+        result.push(1)
+      }
+    } else if (node.isFunctionNode || node.isSymbolNode) {
+      result.push(1)
+    } else if (node.isConstantNode) {
+      result.push(node.value)
+    } else if (node.isFraction) {
+      result.push(node.n)
+    } else {
+      result.push(1)
+    }
+
+    console.log("coeffFromPoly2 result: ", result)
+    return result
   }
 
   function reduceFraction(node, gcd)
@@ -653,6 +709,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
       return b;
     return gcd(b % a, a);
   }
+
   function findGCD(arr, n) {
     let result = arr[0]
     for (let i = 1; i < n; i++) {

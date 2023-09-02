@@ -21,11 +21,13 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
    */
   function startsWithConstant (expr, parenthesis) {
     let curNode = expr
+
+    // console.log("startsWithConstant curNode: ", curNode, "\nparenthesis: ", parenthesis)
     if (parenthesis === 'auto') {
       while (isParenthesisNode(curNode)) curNode = curNode.content
     }
     if (isConstantNode(curNode)) return true
-    if (isOperatorNode(curNode)) {
+    if (isOperatorNode(curNode) && curNode.getIdentifier() !== 'OperatorNode:pow') {
       return startsWithConstant(curNode.args[0], parenthesis)
     }
     return false
@@ -159,6 +161,8 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
             rhsParens = false
           }
 
+          // console.log("Parenthesis root:", root)
+          // console.log("Parenthesis Test00: lhsParens = ", lhsParens, ", rhsParens: ", rhsParens)
           // handle special cases for LaTeX, where some of the parentheses aren't needed
           if (latex) {
             let rootIdentifier
@@ -195,7 +199,7 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
               }
             }
           }
-
+          // console.log("Parenthesis Test01: lhsParens = ", lhsParens, ", rhsParens: ", rhsParens)
           result = [lhsParens, rhsParens]
         }
         break
@@ -228,13 +232,16 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
     if (args.length >= 2 && root.getIdentifier() === 'OperatorNode:multiply' &&
         root.implicit && parenthesis !== 'all' && implicit === 'hide') {
       for (let i = 1; i < result.length; ++i) {
+        // console.log("args[i]: ", args[i])
+        // console.log("startsWithConstant: ", startsWithConstant(args[i], parenthesis))
+
         if (startsWithConstant(args[i], parenthesis) && !result[i - 1] &&
             (parenthesis !== 'keep' || !isParenthesisNode(args[i - 1]))) {
           result[i] = true
         }
       }
     }
-
+    // console.log("Parenthesis Test02: result: ", result)
     return result
   }
 
@@ -620,13 +627,17 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
         const lhs = args[0] // left hand side
         let lhsTex = lhs.toTex(options)
         if (parens[0]) {
+          //console.log("lhs: ", lhsTex)
           lhsTex = `\\left(${lhsTex}\\right)`
+          //console.log("lhs: ", lhsTex)
         }
 
         const rhs = args[1] // right hand side
         let rhsTex = rhs.toTex(options)
         if (parens[1]) {
+          //console.log("rhs: ", rhsTex)
           rhsTex = `\\left(${rhsTex}\\right)`
+          //console.log("rhs: ", rhsTex)
         }
 
         // handle some exceptions (due to the way LaTeX works)
@@ -661,6 +672,7 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
           case 'OperatorNode:multiply':
             if (this.implicit && (implicit === 'hide')) {
               // return lhsTex + '~' + rhsTex
+              // console.log("Test01:", lhsTex + rhsTex)
               return lhsTex + rhsTex
             }
         }
