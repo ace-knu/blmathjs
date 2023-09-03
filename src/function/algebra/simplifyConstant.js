@@ -455,20 +455,17 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           args = args.map(arg => foldFraction(arg, options))
 
           if (fn === 'divide') { // 약분
-            var coefficients = []
             var coeff = []
 
             //coeffFromPoly(args[0], coefficients)
             //coeffFromPoly(args[1], coefficients)
 
-            coefficients.push(coeffFromPoly2(args[0]))
-            coefficients.push(coeffFromPoly2(args[1]))
+            coeff = coeff.concat(coeffFromPoly2(args[0]))
+            coeff = coeff.concat(coeffFromPoly2(args[1]))
 
-            coeff.concat.apply(coeff, coefficients)
+            //console.log("Coefficients: ", coeff)
 
-            console.log("Coefficients", coeff)
-
-            const gcd = findGCD(coefficients, coefficients.length)
+            const gcd = findGCD(coeff, coeff.length)
 
             //console.log("gcd = ", gcd)
             if (gcd > 1) {
@@ -628,13 +625,15 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
 
   function extractCoeff(node) { // 단항에 대한 상수 추출
     let result = 1
-    console.log("extractCoeff")
+    //console.log("extractCoeff")
 
     if (node.isOperatorNode && node.isBinary()) {
       if (node.fn === 'multiply') {
         result *= extractCoeff(node.args[0])
         result *= extractCoeff(node.args[1])
       } 
+    } else if (node.isOperatorNode && node.isUnary()) {
+      result *= extractCoeff(node.args[0])
     } else if (node.isConstantNode) {
         return node.value
     } else if (node.isSymbolNode || node.isFunctionNode) {
@@ -646,17 +645,19 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
 
   function coeffFromPoly2(node) {
     let result = []
-    console.log("coeffFromPoly2", node)
+    //console.log("coeffFromPoly2", node)
 
     if (node.isOperatorNode && node.isBinary()) {
       if (node.fn === 'add' || node.fn === 'subtract') {
-        result.concat(coeffFromPoly2(node.args[0]))
-        result.concat(coeffFromPoly2(node.args[1]))
+        result = result.concat(coeffFromPoly2(node.args[0]))
+        result = result.concat(coeffFromPoly2(node.args[1]))
       } else if (node.fn === 'multiply') {
         result.push(extractCoeff(node))
       } else if (node.fn === 'pow') {
         result.push(1)
       }
+    } else if (node.isOperatorNode && node.isUnary()) {
+      result.push(extractCoeff(node.args[0]))
     } else if (node.isFunctionNode || node.isSymbolNode) {
       result.push(1)
     } else if (node.isConstantNode) {
@@ -667,7 +668,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
       result.push(1)
     }
 
-    console.log("coeffFromPoly2 result: ", result)
+    //console.log("coeffFromPoly2 result: ", result)
     return result
   }
 
