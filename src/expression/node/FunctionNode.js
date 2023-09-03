@@ -86,7 +86,7 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
             } else if (property[match[2]].isOperatorNode && property[match[2]].isUnary()) {
               const arg0 = property[match[2]].args[0]
               if (arg0.isSymbolNode || arg0.isConstantNode) { // -x or -1
-                if (node.isFunctionNode && (node.isTrigonometric || node.isLog)) {
+                if (node.isFunctionNode && (node.isTrigono || node.isArcTrigono || node.isLog)) {
                   latex += '\\left('
                   latex += property[match[2]].toTex(options)
                   latex += '\\right)'  
@@ -152,13 +152,16 @@ export const createFunctionNode = /* #__PURE__ */ factory(name, dependencies, ({
     static name = name
     get type () { return name }
     get isFunctionNode () { return true }
-    get isTrigonometric () { 
+    get isTrigono () { 
       const fn_name = this.fn.name
       return fn_name === 'sin' || fn_name === 'cos' || fn_name === 'tan' 
             || fn_name === 'sinh' || fn_name === 'cosh' || fn_name === 'tanh'
             || fn_name === 'cot' || fn_name === 'csc' || fn_name === 'sec'
             || fn_name === 'coth' || fn_name === 'csch' || fn_name === 'sech'
-            || fn_name === 'asin' || fn_name === 'acos' || fn_name === 'atan' 
+    }
+    get isArcTrigono () { 
+      const fn_name = this.fn.name
+      return fn_name === 'asin' || fn_name === 'acos' || fn_name === 'atan' 
             || fn_name === 'asinh' || fn_name === 'acosh' || fn_name === 'atanh'
             || fn_name === 'acot' || fn_name === 'acsc' || fn_name === 'asec'
             || fn_name === 'acoth' || fn_name === 'acsch' || fn_name === 'asech'

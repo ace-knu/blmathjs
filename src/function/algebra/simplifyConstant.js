@@ -383,7 +383,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
               return matrix(sz)
             }
 
-            if (node.isTrigonometric) {
+            if (node.isTrigono || node.isArcTrigono) {
               const args0 = node.args[0]
               if (args0.isOperatorNode) {
                 //console.log("TEST010", args0)
@@ -429,7 +429,8 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                   // console.log("Error - Display an expression in trigonometric function\n", args0)
                 }
               }
-            } 
+            }
+            
             // Convert all args to nodes and construct a symbolic function call
             return new FunctionNode(node.name, args.map(_ensureNode))
           } else {
@@ -457,11 +458,8 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           if (fn === 'divide') { // 약분
             var coeff = []
 
-            //coeffFromPoly(args[0], coefficients)
-            //coeffFromPoly(args[1], coefficients)
-
-            coeff = coeff.concat(coeffFromPoly2(args[0]))
-            coeff = coeff.concat(coeffFromPoly2(args[1]))
+            coeff = coeff.concat(coeffFromPoly(args[0]))
+            coeff = coeff.concat(coeffFromPoly(args[1]))
 
             //console.log("Coefficients: ", coeff)
 
@@ -472,7 +470,8 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
               reduceFraction(args[0], gcd)
               reduceFraction(args[1], gcd)
             }
-          } 
+          }
+
           if (isCommutative(fn, options.context)) {
             // commutative binary operator
             const consts = []
@@ -501,17 +500,18 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
         } else {
           // non-associative binary operator
           if (fn === 'pow') {
-            //console.log("TEST123", node)
-            const args0 = node.args[1]
-            if (args0.isOperatorNode) {
-              if (args0.isBinary && (args0.fn === 'add') || (args0.fn === 'subtract')) {
-                // Polynomial.
-                // Nothing to do.
-              } else if (args0.isBinary) {
-                if (args0.fn === 'multiply') {  // sin((1/2)*x)
-                  //console.log("TEST200", args0)
-                  const args00 = args0.args[0]
-                  const args01 = args0.args[1]
+            //console.log("simplifyConstant pow: args0", node.args[0], "\nargs1", node.args[1])
+            const args0 = node.args[0]
+            const args1 = node.args[1]
+            
+            if (args1.isOperatorNode) {
+              if (args1.isBinary) {
+                if ((args1.fn === 'add') || (args1.fn === 'subtract')) {
+                  // Polynomial.
+                  // Nothing to do.
+                } else if (args1.fn === 'multiply') {  // sin((1/2)*x)
+                  const args00 = args1.args[0]
+                  const args01 = args1.args[1]
                   if ((args00.isOperatorNode && args00.fn === 'divide') && args01.isSymbolNode) {
                     if (args00.args[0].isConstantNode && args00.args[0].value === 1) {
                       const new_args00 = new OperatorNode('*', 'multiply', [args00.args[0], args01])
@@ -519,13 +519,20 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
                       return new OperatorNode('^', 'pow', [node.args[0], new_args0])
                     }
                   }
-                } else if (args0.fn === 'divide') {
-
+                } else if (args1.fn === 'divide') {
+                  
                 }
-              } else if (args0.isUnary && args0.fn === 'unaryMinus') {
+              } else if (args1.isUnary && args1.fn === 'unaryMinus') {
 
               } else {
                 // console.log("Error - Display an expression in trigonometric function\n", args0)
+              }
+            } else if (args1.isConstantNode) {
+              // console.log("simplifyConstant pow: args0", node.args[0], "\nargs1", node.args[1])
+              if (args0.isFunctionNode && args0.fn.name === 'sqrt') {
+                if (args1.value === 2) {
+                  return args0.args[0]
+                }
               }
             }
           }
@@ -578,50 +585,6 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
 
   return simplifyConstant
 
-  function coeffFromPoly(node, coefficients) {
-    console.log("coeffFromPoly", node)
-
-    if (node.isOperatorNode && node.isBinary() && (node.fn === 'add' || node.fn === 'subtract')){
-      coeffFromPoly(node.args[0], coefficients)
-      coeffFromPoly(node.args[1], coefficients)
-    } else if (node.isOperatorNode && node.isUnary()) {
-      //console.log("coeffFromPoly unary")
-      coeffFromPoly(node.args[0], coefficients)
-    } else if (node.isOperatorNode && node.isBinary() && node.fn === 'multiply') {
-      const args0 = node.args[0]
-      if (args0.isConstantNode) {
-        coefficients.push(args0.value)
-      } else if (args0.isOperatorNode && args0.isUnary()) {
-        if (args0.args[0].isConstantNode) {
-          coefficients.push(args0.args[0].value)
-        } else if (args0.isSymbolNode || args0.isFunctionNode) {
-          coefficients.push(1)
-        }
-      } else if (args0.isOperatorNode && args0.isBinary() && args0.fn === 'multiply') {
-        coeffFromPoly(args0.args[0], coefficients)
-        coeffFromPoly(args0.args[1], coefficients)
-      }
-
-      const args1 = node.args[1]
-      if (args1.isConstantNode) {
-        coefficients.push(args1.value)
-      } else if (args1.isOperatorNode && args1.isUnary()) {
-        if (args1.args[0].isConstantNode) {
-          coefficients.push(args1.args[0].value)
-        } else if (args1.isSymbolNode || args1.isFunctionNode) {
-          coefficients.push(1)
-        }
-      } else if (args1.isOperatorNode && args1.isBinary() && args1.fn === 'multiply') {
-        coeffFromPoly(args1.args[0], coefficients)
-        coeffFromPoly(args1.args[1], coefficients)
-      }
-
-    } else if (node.isConstantNode) {
-      coefficients.push(node.value)
-    } else if (node.isFunctionNode) {
-      coefficients.push(1)
-    }
-  }
 
   function extractCoeff(node) { // 단항에 대한 상수 추출
     let result = 1
@@ -643,14 +606,14 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
     return result
   }
 
-  function coeffFromPoly2(node) {
+  function coeffFromPoly(node) {
     let result = []
-    //console.log("coeffFromPoly2", node)
+    //console.log("coeffFromPoly", node)
 
     if (node.isOperatorNode && node.isBinary()) {
       if (node.fn === 'add' || node.fn === 'subtract') {
-        result = result.concat(coeffFromPoly2(node.args[0]))
-        result = result.concat(coeffFromPoly2(node.args[1]))
+        result = result.concat(coeffFromPoly(node.args[0]))
+        result = result.concat(coeffFromPoly(node.args[1]))
       } else if (node.fn === 'multiply') {
         result.push(extractCoeff(node))
       } else if (node.fn === 'pow') {
@@ -668,7 +631,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
       result.push(1)
     }
 
-    //console.log("coeffFromPoly2 result: ", result)
+    //console.log("coeffFromPoly result: ", result)
     return result
   }
 
