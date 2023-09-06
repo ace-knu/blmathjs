@@ -431,6 +431,18 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
               }
             }
             
+            if (node.name === 'abs' && options.calculateAbsolute) {
+              // console.log("calculateAbsolute is on: ", node)
+              const args0 = node.args[0]
+              if (args0.isConstantNode) {
+                return new ConstantNode(args0.value)
+              } else if (args0.isOperatorNode && args0.isUnary() && args0.fn === 'unaryMinus') {
+                const args00 = args0.args[0]
+                if (args00.isConstantNode) {
+                  return new ConstantNode(args00.value)
+                }
+              }
+            }
             // Convert all args to nodes and construct a symbolic function call
             return new FunctionNode(node.name, args.map(_ensureNode))
           } else {
