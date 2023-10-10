@@ -512,7 +512,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
         } else {
           // non-associative binary operator
           if (fn === 'pow') {
-            //console.log("simplifyConstant pow: args0", node.args[0], "\nargs1", node.args[1])
+            // console.log("simplifyConstant pow: args0", node.args[0], "\nargs1", node.args[1])
             const args0 = node.args[0]
             const args1 = node.args[1]
             

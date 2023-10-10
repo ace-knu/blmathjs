@@ -291,6 +291,9 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { commutative: true } }
     },
     {
+      s: '(ce1*ce2)^2 -> ce1^2 * ce2^2'
+    },
+    {
       s: '(n1*n2)^(-1) -> 1/(n1*n2)',
       assuming: { multiply: { commutative: false } }
     },
