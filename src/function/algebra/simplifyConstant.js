@@ -470,6 +470,16 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           if (fn === 'divide') { // 약분
             var coeff = []
 
+            // Symbol (pi, e) 약분
+            coeff = coeff.concat(coeffSymbolFromPoly(args[0]))
+            coeff = coeff.concat(coeffSymbolFromPoly(args[1]))
+
+            console.log("Coefficients symbols: ", coeff)
+
+
+
+            // Coefficient 약분
+            coeff = []
             coeff = coeff.concat(coeffFromPoly(args[0]))
             coeff = coeff.concat(coeffFromPoly(args[1]))
 
@@ -600,7 +610,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
 
   function extractCoeff(node) { // 단항에 대한 상수 추출
     let result = 1
-    //console.log("extractCoeff")
+    //console.log("extractCoeff", node)
 
     if (node.isOperatorNode && node.isBinary()) {
       if (node.fn === 'multiply') {
@@ -644,6 +654,57 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
     }
 
     //console.log("coeffFromPoly result: ", result)
+    return result
+  }
+
+  function extractCoeffSymbol(node) { // 단항에 대한 심볼 상수 (pi, e) 추출
+    let result = 1
+    console.log("extractCoeffSymbol", node)
+
+    if (node.isOperatorNode && node.isBinary()) {
+      if (node.fn === 'multiply') {
+        result *= extractCoeffSymbol(node.args[0])
+        result *= extractCoeffSymbol(node.args[1])
+      } 
+    } else if (node.isOperatorNode && node.isUnary()) {
+      result *= extractCoeffSymbol(node.args[0])
+    } else if (node.isConstantNode) {
+        return 1
+    } else if (node.isSymbolNode && node.name == 'pi') {
+        return 0;
+    } else if (node.isFunctionNode) {
+        return 1;
+    }
+  
+    return result
+  }
+
+  function coeffSymbolFromPoly(node) {
+    let result = []
+    //console.log("coeffSymbolFromPoly", node)
+
+    if (node.isOperatorNode && node.isBinary()) {
+      if (node.fn === 'add' || node.fn === 'subtract') {
+        result = result.concat(extractCoeffSymbol(node.args[0]))
+        result = result.concat(extractCoeffSymbol(node.args[1]))
+      } else if (node.fn === 'multiply') {
+        result.push(extractCoeffSymbol(node))
+      } else if (node.fn === 'pow') {
+        result.push(1)
+      }
+    } else if (node.isOperatorNode && node.isUnary()) {
+      result.push(extractCoeffSymbol(node.args[0]))
+    } else if (node.isFunctionNode || node.isSymbolNode) {
+      result.push(1)
+    } else if (node.isConstantNode) {
+      result.push(node.value)
+    } else if (node.isFraction) {
+      result.push(node.n)
+    } else {
+      result.push(1)
+    }
+
+    //console.log("coeffSymbolFromPoly result: ", result)
     return result
   }
 
