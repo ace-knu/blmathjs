@@ -653,15 +653,18 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
             // op contains '\\frac' at this point
             return op + '{' + lhsTex + '}' + '{' + rhsTex + '}'
           case 'OperatorNode:pow':
-            if (lhs.isFunctionNode && lhs.isTrigono) { // 삼각함수이면 (\sin x)^2 ==> \sin ^{2} x
-              // console.log("lhs:", lhs, "\nlhsTex:", lhsTex)
-              // console.log("rhs:", rhs, "\nrhsTex:", rhsTex)
-              const tmp = lhsTex.split(lhs.name)
+            // console.log("lhs:", lhs, "\nlhsTex:", lhsTex)
+            // console.log("rhs:", rhs, "\nrhsTex:", rhsTex)
 
-              return tmp[0] + lhs.name + '^{' + rhsTex + '}' + tmp[1]
-            } else if (lhs.isFunctionNode && lhs.isArcTrigono) {
-              lhsTex = '{\\left(' + lhsTex + '\\right)}'
-              rhsTex = '{' + rhsTex + '}'
+            if (lhs.isFunctionNode) {
+              if (lhs.isTrigono) { // 삼각함수이면 (\sin x)^2 ==> \sin ^{2} x
+                const tmp = lhsTex.split(lhs.name)
+
+                return tmp[0] + lhs.name + '^{' + rhsTex + '}' + tmp[1]
+              } else if (lhs.isArcTrigono || lhs.name === 'log') {
+                lhsTex = '{\\left(' + lhsTex + '\\right)}'
+                rhsTex = '{' + rhsTex + '}'
+              } 
             } else {
               lhsTex = '{' + lhsTex + '}'
               rhsTex = '{' + rhsTex + '}'

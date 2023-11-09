@@ -474,11 +474,36 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
             coeff = coeff.concat(coeffSymbolFromPoly(args[0]))
             coeff = coeff.concat(coeffSymbolFromPoly(args[1]))
 
-            console.log("Coefficients symbols: ", coeff)
+            //console.log("Coefficients symbols: ", coeff)
 
+            let existAllTerms = true
+            for (let i = 0; i < coeff.length; i++) {
+              if (coeff[i] !== 0) {
+                existAllTerms = false
+                break;
+              }
+            }
 
+            if (existAllTerms) {
+              //console.log("Before reduceFractionSymbol ", node.args[0], "\n", node.args[1])
+              if (args[0].isSymbolNode && args[0].name === 'pi') {
+                node.args[0] = new ConstantNode(1)
+                //console.log("Test000 ", node)
+              } else
+                reduceFractionSymbol(node.args[0])
+
+              if (args[1].isSymbolNode && args[1].name === 'pi')
+                node.args[1] = new ConstantNode(1)
+              else                
+                reduceFractionSymbol(node.args[1])
+
+              //console.log("After reduceFractionSymbol ", node.args[0], "\n", node.args[1])
+              }
 
             // Coefficient 약분
+            args = allChildren(node, options.context)
+            args = args.map(arg => foldFraction(arg, options))
+  
             coeff = []
             coeff = coeff.concat(coeffFromPoly(args[0]))
             coeff = coeff.concat(coeffFromPoly(args[1]))
@@ -657,57 +682,6 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
     return result
   }
 
-  function extractCoeffSymbol(node) { // 단항에 대한 심볼 상수 (pi, e) 추출
-    let result = 1
-    console.log("extractCoeffSymbol", node)
-
-    if (node.isOperatorNode && node.isBinary()) {
-      if (node.fn === 'multiply') {
-        result *= extractCoeffSymbol(node.args[0])
-        result *= extractCoeffSymbol(node.args[1])
-      } 
-    } else if (node.isOperatorNode && node.isUnary()) {
-      result *= extractCoeffSymbol(node.args[0])
-    } else if (node.isConstantNode) {
-        return 1
-    } else if (node.isSymbolNode && node.name == 'pi') {
-        return 0;
-    } else if (node.isFunctionNode) {
-        return 1;
-    }
-  
-    return result
-  }
-
-  function coeffSymbolFromPoly(node) {
-    let result = []
-    //console.log("coeffSymbolFromPoly", node)
-
-    if (node.isOperatorNode && node.isBinary()) {
-      if (node.fn === 'add' || node.fn === 'subtract') {
-        result = result.concat(extractCoeffSymbol(node.args[0]))
-        result = result.concat(extractCoeffSymbol(node.args[1]))
-      } else if (node.fn === 'multiply') {
-        result.push(extractCoeffSymbol(node))
-      } else if (node.fn === 'pow') {
-        result.push(1)
-      }
-    } else if (node.isOperatorNode && node.isUnary()) {
-      result.push(extractCoeffSymbol(node.args[0]))
-    } else if (node.isFunctionNode || node.isSymbolNode) {
-      result.push(1)
-    } else if (node.isConstantNode) {
-      result.push(node.value)
-    } else if (node.isFraction) {
-      result.push(node.n)
-    } else {
-      result.push(1)
-    }
-
-    //console.log("coeffSymbolFromPoly result: ", result)
-    return result
-  }
-
   function reduceFraction(node, gcd)
   {
     if (node.isOperatorNode && node.isBinary() && (node.fn === 'add' || node.fn === 'subtract')){
@@ -738,6 +712,89 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
       node.value /= gcd
     } else if (node.isFraction) {
       node.n /= gcd
+    }
+  }
+
+  function extractCoeffSymbol(node) { // 단항에 대한 심볼 상수 (pi, e) 추출
+    let result = 1
+    //console.log("extractCoeffSymbol", node)
+
+    if (node.isOperatorNode && node.isBinary()) {
+      if (node.fn === 'multiply') {
+        result *= extractCoeffSymbol(node.args[0])
+        result *= extractCoeffSymbol(node.args[1])
+      } 
+    } else if (node.isOperatorNode && node.isUnary()) {
+      result *= extractCoeffSymbol(node.args[0])
+    } else if (node.isConstantNode) {
+        return 1
+    } else if (node.isSymbolNode && node.name === 'pi') {
+        return 0;
+    } else if (node.isFunctionNode) {
+        return 1;
+    }
+  
+    return result
+  }
+
+  function coeffSymbolFromPoly(node) {
+    let result = []
+    //console.log("coeffSymbolFromPoly", node)
+
+    if (node.isOperatorNode && node.isBinary()) {
+      if (node.fn === 'add' || node.fn === 'subtract') {
+        result = result.concat(extractCoeffSymbol(node.args[0]))
+        result = result.concat(extractCoeffSymbol(node.args[1]))
+      } else if (node.fn === 'multiply') {
+        result.push(extractCoeffSymbol(node))
+      } else if (node.fn === 'pow') {
+        result.push(1)
+      }
+    } else if (node.isOperatorNode && node.isUnary()) {
+      result.push(extractCoeffSymbol(node.args[0]))
+    } else if (node.isFunctionNode) {
+      result.push(1)
+    } else if (node.isSymbolNode && node.name === 'pi') {
+      result.push(0)
+    } else if (node.isConstantNode) {
+      result.push(1)
+    } else if (node.isFraction) {
+      result.push(node.n)
+    } else {
+      result.push(1)
+    }
+
+    //console.log("coeffSymbolFromPoly result: ", result)
+    return result
+  }
+
+  function reduceFractionSymbol(node)
+  {
+    //console.log("reduceFractionSymbol", node)
+
+    if (node.isOperatorNode) {
+      if (node.isBinary()) {
+        if (node.fn === 'add' || node.fn === 'subtract') {
+          reduceFractionSymbol(node.args[0])
+          reduceFractionSymbol(node.args[1])
+        } else if (node.fn === 'multiply') {
+          const args0 = node.args[0]
+          if (args0.isSymbolNode && args0.name === 'pi') {
+            //console.log("Found args0 pi ", node)
+            node.args[0] = new ConstantNode(1)
+            //console.log("Changed args0 pi ", node)
+          }
+    
+          const args1 = node.args[1]
+          if (args1.isSymbolNode && args1.name === 'pi') {
+            //console.log("Found args1 pi ", node)
+            node.args[1] = new ConstantNode(1)
+            //console.log("Changed args1 pi ", node)
+          }
+        } 
+      } else if (node.isUnary()) {
+        reduceFractionSymbol(node.args[0])
+      }
     }
   }
 
