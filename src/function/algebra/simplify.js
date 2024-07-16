@@ -247,7 +247,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     // { l: '+n1', r:'n1' },     // simplifyCore
     // { l: 'n--n1', r:'n+n1' }, // simplifyCore
     { l: 'log(e)', r: '1' },
-
+    { l: 'log(1)', r: '0' },
     // temporary rules
     // Note initially we tend constants to the right because like-term
     // collection prefers the left, and we would rather collect nonconstants
@@ -275,6 +275,8 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(-n1)/n2', r: '-(n1/n2)' },
     { l: 'n1/(-n2)', r: '-(n1/n2)' },
     { l: '-(n1 n2)', r: '-n1 n2' }, //jcho
+    { l: '-(n1-n2)', r: '-n1+n2'},
+    { l: '-(n1+n2)', r: '-n1-n2'},
     { l: '(-n1) n2', r: '-(n1 n2)' },
     // { l: '-v', r: 'v * (-1)' }, // finish making non-constant terms positive
     { l: '(n1 + n2)*(-1)', r: '-(n1 + n2)', repeat: true }, // expand negations to achieve as much sign cancellation as possible
@@ -350,7 +352,15 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { commutative: false } }
     },
     {
+      s: 'n*vd - vd -> (n-1) vd',
+      assuming: { multiply: { commutative: false } }
+    },
+    {
       s: 'vd + n*vd -> (1+n) vd',
+      assuming: { multiply: { commutative: false } }
+    },
+    {
+      s: 'vd - n*vd -> (1-n) vd',
       assuming: { multiply: { commutative: false } }
     },
     /*{
@@ -438,9 +448,10 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     },
     {
       s: 'n^-1 -> 1/n',
-      // assuming: { multiply: { commutative: true } } // o.w. / not conventional
+      assuming: { power: { minus_one: false } } // o.w. / not conventional
     },
     { l: 'n^1', r: 'n' }, // can be produced by power cancellation
+    { l: 'n^0', r: '1' },
     {
       s: 'n*(n1/n2) -> (n*n1)/n2', // '*' before '/'
       assuming: { multiply: { associative: true } }
@@ -462,9 +473,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     },
     { l: '-(n1+n2)', r: '-n1-n2' },
     // { l: 'n1/(-n2)', r: '-n1/n2' },
-    { l: '-(n1*n2)', r: '-n1 n2'}
-   
-
+    { l: '-(n1*n2)', r: '-n1 n2'}   
   ]
 
   /**

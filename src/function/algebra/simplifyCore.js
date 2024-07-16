@@ -137,47 +137,80 @@ export const createSimplifyCore = /* #__PURE__ */ factory(name, dependencies, ({
         }
         node = new OperatorNode(op, node.name, node.args)
       } else {
-        if ((node.name === 'sqrt') && (node.args[0].isConstantNode)) { // sqrt(4) ==> 2, sqrt(12) ==> 2 sqrt(3)
-          let inner = node.args[0].value
-          //console.log('==================================')
-          //console.log("Test00", node)
-          let primes = []
-          for (let i = 2; i <= inner; i++) {
-            while (inner % i === 0) {
-              inner /= i;
-              primes.push(i);
-            }
-            if (inner === 1) break;
-          }         
-          //console.log("PrimeNumber", primes)
-          inner = node.args[0].value
-          let outer = 1;
-          let prevNum = 0;
-          primes.forEach((number) => {
-            if (prevNum === 0) {
-              prevNum = number
-            } else if (prevNum === number) {
-              outer = outer * number
-              inner = inner / (number*number)
-              prevNum = 0
+        if (node.name === 'sqrt') { 
+          if (node.args[0].isConstantNode) {      // sqrt(4) ==> 2, sqrt(12) ==> 2 sqrt(3)
+            let inner = node.args[0].value
+            //console.log('==================================')
+            //console.log("Test00", node)
+            let primes = []
+            for (let i = 2; i <= inner; i++) {
+              while (inner % i === 0) {
+                inner /= i;
+                primes.push(i);
+              }
+              if (inner === 1) break;
+            }         
+            //console.log("PrimeNumber", primes)
+            inner = node.args[0].value
+            let outer = 1;
+            let prevNum = 0;
+            primes.forEach((number) => {
+              if (prevNum === 0) {
+                prevNum = number
+              } else if (prevNum === number) {
+                outer = outer * number
+                inner = inner / (number*number)
+                prevNum = 0
+              } else {
+                prevNum = number
+              }
+            })
+            //console.log("outer", outer)
+            //console.log("inner", inner)
+            if (inner === 1) {
+              return new ConstantNode(outer)
+            } else if (outer === 1) {
+              return node
             } else {
-              prevNum = number
-            }
-          })
-          //console.log("outer", outer)
-          //console.log("inner", inner)
-          if (inner === 1) {
-            return new ConstantNode(outer)
-          } else if (outer === 1) {
-            return node
-          } else {
-            const arg_0 = new ConstantNode(outer)
-            const arg_1_1 = new ConstantNode(inner)
-            const arg_1 = new FunctionNode(node.fn, [arg_1_1])
+              const arg_0 = new ConstantNode(outer)
+              const arg_1_1 = new ConstantNode(inner)
+              const arg_1 = new FunctionNode(node.fn, [arg_1_1])
 
-            const newNode = new OperatorNode('*', 'multiply', [arg_0, arg_1], node.implicit)
-            //console.log("DEBUG", newNode.toString())
-            return newNode
+              const newNode = new OperatorNode('*', 'multiply', [arg_0, arg_1], node.implicit)
+              //console.log("DEBUG", newNode.toString())
+              return newNode
+            }
+          } else if (isOperatorNode(node.args[0]) && node.args[0].op === '*') { // sqrt(4x) ==> 2sqrt(x)
+            //console.log('==================================')
+            //console.log("Test00", node)
+            const arg_0 = node.args[0].args[0];
+            const arg_1 = node.args[0].args[1];
+
+            if (arg_0.isConstantNode) {
+              const value = Math.sqrt(arg_0.value);
+
+              if (Number.isInteger(value)) {
+                const new_arg = new ConstantNode(value)
+                const new_sqrt = new FunctionNode(node.fn, [arg_1])
+
+                const new_node = new OperatorNode('*', 'multiply', [new_arg, new_sqrt], node.implicit)
+                //console.log ("DEBUG", new_node.toString())
+
+                return new_node
+              }
+            } else if (arg_1.isConstantNode) {
+              const value = Math.sqrt(arg_1.value);
+
+              if (Number.isInteger(value)) {
+                const new_arg = new ConstantNode(value)
+                const new_sqrt = new FunctionNode(node.fn, [arg_0])
+
+                const new_node = new OperatorNode('*', 'multiply', [new_arg, new_sqrt], node.implicit)
+                //console.log ("DEBUG", new_node.toString())
+
+                return new_node
+              }
+            }
           }
         } else {
           return new FunctionNode(
@@ -204,12 +237,8 @@ export const createSimplifyCore = /* #__PURE__ */ factory(name, dependencies, ({
         }
       }
       let finish = true
-      if (node.op === '-') { // unary minus
+      if (node.op === '-') { // unary minus  
         if (isOperatorNode(a0)) {
-          if (a0.isBinary() && a0.fn === 'subtract') {
-            node = new OperatorNode('-', 'subtract', [a0.args[1], a0.args[0]])
-            finish = false // continue to process the new binary node
-          }
           if (a0.isUnary() && a0.op === '-') {
             return a0.args[0]
           }

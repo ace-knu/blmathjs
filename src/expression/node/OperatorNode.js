@@ -232,7 +232,7 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
     if (args.length >= 2 && root.getIdentifier() === 'OperatorNode:multiply' &&
         root.implicit && parenthesis !== 'all' && implicit === 'hide') {
       for (let i = 1; i < result.length; ++i) {
-        // console.log("args[i]: ", args[i])
+        // console.log("args[", i, "]: ", args[i])
         // console.log("startsWithConstant: ", startsWithConstant(args[i], parenthesis))
 
         if (startsWithConstant(args[i], parenthesis) && !result[i - 1] &&
@@ -607,6 +607,7 @@ export const createOperatorNode = /* #__PURE__ */ factory(name, dependencies, ({
       let op = latexOperators[this.fn]
       op = typeof op === 'undefined' ? this.op : op // fall back to using this.op
 
+      // console.log("DEBUG OperatorNode._toTex()", this.toString());
       if (args.length === 1) { // unary operators
         const assoc = getAssociativity(this, parenthesis)
 
