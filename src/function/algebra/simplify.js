@@ -271,6 +271,9 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: '-(v*cl) -> v (-cl)', // non-commutative version, part 2
       assuming: { multiply: { commutative: false }, subtract: { total: true } }
     },
+    { l: '(n1/n2)/(n3/n4)', r: '(n1*n4)/(n2*n3)'},    // 번분수 처리
+    { l: 'n1/(n2/n3)', r: '(n1*n3)/n2'},    // 번분수 처리
+    { l: '(n1/n2)/n3', r: 'n1/(n2*n3)'},    // 번분수 처리
     //{ l: '-(n1/n2)', r: '-n1/n2' },
     { l: '(-n1)/n2', r: '-(n1/n2)' },
     { l: 'n1/(-n2)', r: '-(n1/n2)' },
@@ -288,6 +291,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(n+cd1)+cd2', r: 'n+(cd1+cd2)' },
     { l: '(n-cd1)-cd2', r: 'n-(cd1+cd2)' },
     { l: '(n-cd1)+cd2', r: 'n-(cd1-cd2)' },
+    { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
     {
       s: '(n1*n2)^n3 -> n1^n3 * n2^n3',
       assuming: { multiply: { commutative: true } }
