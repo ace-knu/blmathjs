@@ -456,6 +456,9 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
         let args
         let res
         const makeNode = createMakeNodeFunction(node)
+
+        //console.log("Debug - simplifyConstant:", node)
+
         if (isOperatorNode(node) && node.isUnary()) {
           args = [foldFraction(node.args[0], options)]
           if (!isNode(args[0])) {

@@ -389,6 +389,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       assuming: { multiply: { commutative: false } }
     },*/
     { l: 'cd1*n/cd2', r: '(cd1/cd2)*n'}, // 4 * sin(x) / 3 ==> (4 /3) * sin(x)
+
     { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
     /*{
       s: 'cd + cd*n -> cd (1+n)',
@@ -404,6 +405,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
    // { l: '(1/cd)*ce', r: 'ce/cd' }, // 1/2*sqrt(3) ==> sqrt(3)/2
 
     { l: '(1/cd)*pi', r: 'pi/cd' },
+    { l: '(1/n)*pi', r: 'pi/n'},
     { l: '(1/cd)*e', r: 'e/cd' },
     { l: '(cd1*pi)/cd2', r: 'cd1/cd2*pi' },
     { l: '(pi*ve)/cd', r: 'pi/cd*ve'},
@@ -475,9 +477,10 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'n1/(n2/n3) -> (n1 n3)/n2',
       assuming: { multiply: { associative: true } }
     },
+    { l: 'pi * cd', r: 'cd * pi'},
     { l: '-(n1+n2)', r: '-n1-n2' },
     // { l: 'n1/(-n2)', r: '-n1/n2' },
-    { l: '-(n1*n2)', r: '-n1 n2'}   
+    { l: '-(n1*n2)', r: '-n1 n2'}
   ]
 
   /**
