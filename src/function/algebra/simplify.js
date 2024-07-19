@@ -407,6 +407,9 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
 
     { l: '(1/cd)*pi', r: 'pi/cd' },
     { l: '(1/n)*pi', r: 'pi/n'},
+    { l: '(1/cd)*pi^n', r: '(pi^n)/cd' },
+    { l: '(1/n)*pi^n', r: '(pi^n)/n'},
+    
     { l: '(1/cd)*e', r: 'e/cd' },
     { l: '(cd1*pi)/cd2', r: 'cd1/cd2*pi' },
     { l: '(pi*ve)/cd', r: 'pi/cd*ve'},
