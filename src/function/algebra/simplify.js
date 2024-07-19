@@ -292,6 +292,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(n-cd1)-cd2', r: 'n-(cd1+cd2)' },
     { l: '(n-cd1)+cd2', r: 'n-(cd1-cd2)' },
     { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
+    { l: 'sqrt(cd1)/sqrt(cd2)', r: 'sqrt(cd1/cd2)'},
     {
       s: '(n1*n2)^n3 -> n1^n3 * n2^n3',
       assuming: { multiply: { commutative: true } }
@@ -388,7 +389,9 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },*/
-    { l: 'cd1*n/cd2/cd3', r: '(cd1*cd3*n)/cd2'},
+    { l: 'cd1*n/(cd2/cd3)', r: '(cd1*cd3*n)/cd2'},
+    { l: '(cd1*n/cd2)*cd3', r: '(cd1*cd3*n)/cd2'},
+    { l: '(cd1/n)*cd2', r: '(cd1*cd2)/n'},
     { l: 'cd1*n/cd2', r: '(cd1/cd2)*n'}, // 4 * sin(x) / 3 ==> (4 /3) * sin(x)
 
     { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
@@ -411,9 +414,15 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(1/n)*pi^n', r: '(pi^n)/n'},
     
     { l: '(1/cd)*e', r: 'e/cd' },
+    { l: '(1/n)*e', r: 'e/n'},
+    { l: '(1/cd)*e^n', r: '(e^n)/cd' },
+    { l: '(1/n)*e^n', r: '(e^n)/n'},
+    
     { l: '(cd1*pi)/cd2', r: 'cd1/cd2*pi' },
     { l: '(pi*ve)/cd', r: 'pi/cd*ve'},
     { l: '(cd1*ve)/cd2', r: 'cd1/cd2*ve' },
+
+    { l: 'sqrt(cd1/cd2)', r: 'sqrt(cd1)/sqrt(cd2)'},
 
     simplifyConstant, // Second: before returning expressions to "standard form"
 
@@ -480,6 +489,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'n1/(n2/n3) -> (n1 n3)/n2',
       assuming: { multiply: { associative: true } }
     },
+    { l: 'sqrt(cd1)/sqrt(cd2)', r: 'sqrt(cd1/cd2)'},
     { l: 'pi * cd', r: 'cd * pi'},
     { l: '-(n1+n2)', r: '-n1-n2' },
     // { l: 'n1/(-n2)', r: '-n1/n2' },

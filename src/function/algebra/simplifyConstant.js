@@ -362,12 +362,29 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
             // If all args are numbers
             if (!args.some(isNode)) { // sqrt(8) or log(2)
               try {
-                //console.log("Test00", node) // jcho
+                // console.log("Test00", node) // jcho
                 //return _eval(node.name, args, options)
                 const args2 = node.args.args.map(arg => foldFraction(arg, options))
                 node.args = _eval(node.args[0].fn.toString(), args2, options)
+
+                console.log("Test01:", node);
                 return node
               } catch (ignoreandcontinue) { }
+            }
+
+            if (node.name === 'sqrt') {
+              //console.log("Test10 - ", node);
+              const arg0 = node.args[0];
+
+              if (arg0.isConstantNode) {
+                //console.log("Test11 - ", arg0);
+                const result = Math.sqrt(arg0.value);
+
+                if (Number.isInteger(result)) {
+                  //console.log("Test12 - ", result);
+                  return new ConstantNode(result);
+                }
+              }
             }
 
             // Size of a matrix does not depend on entries
