@@ -388,6 +388,7 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
       s: 'cd*n + cd -> cd (n+1)',
       assuming: { multiply: { commutative: false } }
     },*/
+    { l: 'cd1*n/cd2/cd3', r: '(cd1*cd3*n)/cd2'},
     { l: 'cd1*n/cd2', r: '(cd1/cd2)*n'}, // 4 * sin(x) / 3 ==> (4 /3) * sin(x)
 
     { l: 'cd1*n*cd2', r: 'cd1*cd2*n'},
@@ -421,7 +422,6 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: '(-n1)/n2', r: '-(n1/n2)' },
     { l: 'n1/(-n2)', r: '-(n1/n2)' },
 
-   
     {
       s: 'n1*(-n) -> -(n1 n)', // in case * non-commutative
       assuming: { subtract: { total: true }, multiply: { commutative: false } }
