@@ -487,7 +487,7 @@ export const createSimplifyConstant = /* #__PURE__ */ factory(name, dependencies
           args = allChildren(node, options.context)
           args = args.map(arg => foldFraction(arg, options))
 
-          if (fn === 'divide') { // 약분
+          if ((fn === 'divide') && options.reduceFraction) { // 약분
             var coeff = []
 
             // Symbol (pi, e) 약분

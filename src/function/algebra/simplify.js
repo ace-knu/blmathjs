@@ -275,6 +275,9 @@ export const createSimplify = /* #__PURE__ */ factory(name, dependencies, (
     { l: 'n1/(n2/n3)', r: '(n1*n3)/n2'},    // 번분수 처리
     { l: '(n1/n2)/n3', r: 'n1/(n2*n3)'},    // 번분수 처리
     //{ l: '-(n1/n2)', r: '-n1/n2' },
+
+    { l: '(cd1/n)*pi', r: '(cd1*pi)/n'},
+
     { l: '(-n1)/n2', r: '-(n1/n2)' },
     { l: 'n1/(-n2)', r: '-(n1/n2)' },
     { l: '-(n1 n2)', r: '-n1 n2' }, //jcho
